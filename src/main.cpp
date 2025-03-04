@@ -5,6 +5,8 @@
 #include <sstream>
 
 #include "Node.h"
+#include "Net.h"
+#include "LinkedList.h"
 
 using namespace std;
 
@@ -58,6 +60,6 @@ int main() {
     Nodes = parseNodes(filepath+".nodes");
     cout << Nodes.size();
 
-    
+
     return 0;
 }
