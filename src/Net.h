@@ -7,11 +7,14 @@
 class Net
 {
 private:
-    linkedlist* net;
-    string netName;
+    linkedlist* net_;
+    string netName_;
 public:
-    Net(/* args */);
-    ~Net();
+    Net(string netName, linkedlist* net){
+        netName_ = netName;
+        net_ = net;
+    };
+    ~Net(){};
 };
 
 #endif
