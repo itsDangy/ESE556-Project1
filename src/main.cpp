@@ -74,27 +74,27 @@ vector<Net> parseNets(string filename, vector<Node> nodes) {
     }
 
     getline(NetFile,line); //gets NumPins line (not needed)
-    getline(NetFile,line);
-    getline(NetFile,line);
-    stringstream iss(line);
-    string t;
-    int numNodes;
-    string netName;
-    iss >> t >> t >> numNodes >> netName;
-    cout << numNodes << " " << netName << endl;
-    for (int i = 0; i < numNodes; i++) {
+
+    while (Nets.size()<numNets||!NetFile.eof()) {
         getline(NetFile,line);
+        if (line.empty() || line[0] == '#') continue;
         stringstream iss(line);
-        string nodeName;
-        iss >> nodeName;
-        
+        string t;
+        int numNodes;
+        string netName;
+        iss >> t >> t >> numNodes >> netName;
+        //cout << numNodes << " " << netName << endl;
+        vector<string> nodeList;
+        for (int i = 0; i < numNodes; i++) {
+            getline(NetFile,line);
+            iss << line;
+            string nodeName;
+            iss >> nodeName;
+            nodeList.push_back(nodeName);
+        }
+        Net net(netName, nodeList);
+        Nets.push_back(net);
     }
-
-    // while (Nets.size()<numNets||!NetFile.eof()) {
-    //     getline(NetFile,line);
-    //     if (line.empty() || line[0] == '#') continue;
-
-    // }
 
     NetFile.close();
     return Nets;
@@ -110,7 +110,7 @@ int main() {
 
     vector<Net> Nets;
     Nets = parseNets(filepath+".nets", Nodes);
-    //cout << Nets.size() << endl;
+    cout << Nets.size() << endl;
 
     return 0;
 }
