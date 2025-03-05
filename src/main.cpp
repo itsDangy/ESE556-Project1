@@ -127,6 +127,26 @@ vector<Net> parseNets(string filename, vector<Node>* nodes) {
     return Nets;
 }
 
+void writeOutput(string filename, unordered_map<int, int> leftBucket, unordered_map<int, int> rightBucket, int cutsize) {
+    ofstream OutputFile(filename);
+    if(!OutputFile.is_open()) {
+        cerr << filename << " not found" << endl;
+        exit(EXIT_FAILURE);
+    }
+
+    OutputFile << "Cutsize: " << cutsize << endl;
+    OutputFile << "Partition 1: " << endl;
+    for (auto i : leftBucket) {
+        OutputFile << i.second << " ";
+    }
+    OutputFile << endl;
+    OutputFile << "Partition 2: " << endl;
+    for (auto i : rightBucket) {
+        OutputFile << i.second << " ";
+    }
+
+    OutputFile.close();
+}
 
 int calculateAllGains(vector<Node> Nodes, vector<Net> Nets) {
     int cutsize = 0;
@@ -208,15 +228,16 @@ int calculateAllGains(vector<Node> Nodes, vector<Net> Nets) {
 
 int main() {
     string benchmark = "superblue18";
-    string filepath = "../Benchmarks/" + benchmark + "/" + benchmark;
+    string ifilepath = "../Benchmarks/" + benchmark + "/" + benchmark;
+    string ofilepath = "../Output/" + benchmark + ".txt";
 
     //Parse the nodes
     vector<Node> Nodes;
-    Nodes = parseNodes(filepath+".nodes");
+    Nodes = parseNodes(ifilepath+".nodes");
     cout << Nodes.size() << endl;
 
     vector<Net> Nets;
-    Nets = parseNets(filepath+".nets", &Nodes);
+    Nets = parseNets(ifilepath+".nets", &Nodes);
     cout << Nets.size() << endl;
 
     cout << Nodes[45].getID() << endl;
@@ -268,6 +289,6 @@ int main() {
 
 
 
-
+    writeOutput(ofilepath,leftBucket,rightBucket,currentCutsize);
     return 0;
 }
