@@ -46,6 +46,7 @@ public:
 
     //Used to calculate gains
     void incCrossings() {crossings++;}
+    int getCrossings() {return crossings;}
 };
 
 #endif //Node_H

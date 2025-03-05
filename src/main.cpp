@@ -128,33 +128,33 @@ vector<Net> parseNets(string filename, vector<Node>* nodes) {
 }
 
 
-int calculateAllGains(vector<Node> Nodes, vector<Net> Nets) {
+int calculateAllGains(vector<Node>* Nodes, vector<Net>* Nets) {
     int cutsize = 0;
-    bool flag = false;  //Used to see if we should break look and increment the crossings for the nets
+    bool flag = false;  // Used to see if we should break loop and increment the crossings for the nets
 
-    for (size_t i = 0; i < Nets.size(); i++) {
-        int node0Idx = Nets[i].getConnectedNodes()[0];
-        for (size_t j = 0; j < (Nets[i].getConnectedNodes()).size(); j++) {
-            //Visit each node on the net and compare it to the first. 
-            //If it crosses the partition (XOR)
-                //globalCutsize++
-                //set the bool cut (in net.h) to true
-                //Break the for (j) loop
-            int nodejIdx = Nets[i].getConnectedNodes()[j];
-            if (Nodes[node0Idx].whichPartition() ^ Nodes[nodejIdx].whichPartition()) {
+    for (size_t i = 0; i < Nets->size(); i++) {
+        int node0Idx = (*Nets)[i].getConnectedNodes()[0];
+        for (size_t j = 0; j < (*Nets)[i].getConnectedNodes().size(); j++) {
+            // Visit each node on the net and compare it to the first. 
+            // If it crosses the partition (XOR)
+            // globalCutsize++
+            // set the bool cut (in net.h) to true
+            // Break the for (j) loop
+            int nodejIdx = (*Nets)[i].getConnectedNodes()[j];
+            if ((*Nodes)[node0Idx].whichPartition() ^ (*Nodes)[nodejIdx].whichPartition()) {
                 cutsize++;
-                Nets[i].cut = 1;
+                (*Nets)[i].cut = 1;
                 flag = true;
                 break;
             }
         }
 
-        //if flag is true
+        // if flag is true
         if (flag == true) {
-            for (size_t j = 0; j < (Nets[i].getConnectedNodes()).size(); j++) {
-                //Loop through every node on the net and increment that node's cut size
-                int nodejIdx = Nets[i].getConnectedNodes()[j];
-                Nodes[nodejIdx].incCrossings();
+            for (size_t j = 0; j < (*Nets)[i].getConnectedNodes().size(); j++) {
+                // Loop through every node on the net and increment that node's cut size
+                int nodejIdx = (*Nets)[i].getConnectedNodes()[j];
+                (*Nodes)[nodejIdx].incCrossings();
             }
         }
     }
@@ -162,47 +162,26 @@ int calculateAllGains(vector<Node> Nodes, vector<Net> Nets) {
     cout << "\nTotal Global Cutsize: " << cutsize << endl;
     cout << "offset" << offset << endl;
 
-    //Used for testing 
-    int testNode = 121777;
-    cout << "Net: " << Nets[testNode].getName() <<" has " << (Nets[testNode].getConnectedNodes()).size() << " nodes connected. isCut(): ";
-    if (Nets[testNode].cut == 1) {
+    // Used for testing 
+    int testNode = 5;
+    cout << "Net: " << (*Nets)[testNode].getName() << " has " << (*Nets)[testNode].getConnectedNodes().size() << " nodes connected. isCut(): ";
+    if ((*Nets)[testNode].cut == 1) {
         cout << "1" << endl;
     } else {
         cout << "0" << endl;
     }
 
-    for (size_t j = 0; j < (Nets[testNode].getConnectedNodes()).size(); j++) {
-        int nodejIdx = Nets[testNode].getConnectedNodes()[j];
-        cout << "Connected node [" << nodejIdx << "] has ID: " << Nodes[nodejIdx].getID() << " and is partition: " << Nodes[nodejIdx].whichPartition();
+    for (size_t j = 0; j < (*Nets)[testNode].getConnectedNodes().size(); j++) {
+        int nodejIdx = (*Nets)[testNode].getConnectedNodes()[j];
+        cout << "Connected node [" << nodejIdx << "] has ID: " << (*Nodes)[nodejIdx].getID() << " and is partition: " << (*Nodes)[nodejIdx].whichPartition();
         if (nodejIdx > offset) {
             cout << " which is p" << nodejIdx - offset << endl;
         } else {
             cout << endl;
         }
+        cout << "\t" << "Also has a gain of: " << (*Nodes)[nodejIdx].getCrossings() << endl;
     }
 
-    //Check for cut nodes
-    /*
-    This entire thing should be O(MN) time
-    For each net, compare the first node to every other node connected to the net.
-        If it crosses, then inc the global cutsize
-        And inc node_cut in type node
-            //This is to keep track to calculate the gain
-
-
-    for (each net i) {
-        for (each node j) {
-            Compare the node[0] of net[i] to node[i]
-            If it crosses, 
-                globalCutsize++
-                set bool cut (in net.h) to true
-                for every node on the net:
-                    increment the cut (Number of crossings)
-                    inc the gain
-        }
-    }
-    After we have calculated all the gains, we can finally add this onto the bucks using parition and gain(Per node)
-    */
     return cutsize;
 }
 
@@ -232,14 +211,6 @@ int main() {
 
     //At this time, we should have everything parsed into the correct data structures
 
-    //Create 2 buckets -- left and right
-    //This bucket is a unordered map (Hashmap), whos key is an int going form PMAX to -PMAX.
-    //The value will be the pointer to a doubly linked list (DLL). The Data for this DLL will be an int, which will
-    //reference the index in vector Nodes.
-
-    unordered_map<int, int> leftBucket;
-    unordered_map<int, int> rightBucket;
-
     //Creates the timeline necessary for FM to climb hills and work
     //The index will be the iteration number, while the timePoint struct holds the relevant information for that paticular iteration
     vector<timePoint> timeline;
@@ -255,9 +226,60 @@ int main() {
 
 
     //Determine the gains, store the current gains in the Nodes structure.
-    int currentCutsize = calculateAllGains(Nodes, Nets);
+    int currentCutsize = calculateAllGains(&Nodes, &Nets);
 
+
+    //Create 2 buckets -- left and right
+    //This bucket is a unordered map (Hashmap), whos key is an int going form PMAX to -PMAX.
+    //The value will be the pointer to a doubly linked list (DLL). The Data for this DLL will be an int, which will
+    //reference the index in vector Nodes.
+
+    unordered_map<int, linkedlist*> leftBucket; //Left bucket is considered 0
+    unordered_map<int, linkedlist*> rightBucket;    //Right bucket is considered 1
+
+    
+    unordered_map<int, linkedlist*> *currentBucket; //Used to effectively swap between the two buckets
     //Seperate the nodes out to the buckets, dependant on parition and gain.
+    for (int i = 0; i < numNodes; i++) {
+        
+        if (Nodes[i].whichPartition() == 1) {
+            //If the partition is the left
+            currentBucket = &leftBucket;
+        } else {
+            //If the partition is on the right
+            currentBucket = &rightBucket;
+        }
+
+        //currentBucket is now set to either the left or right bucket, depending on which parition the current node is
+        if((*currentBucket).find(Nodes[i].getCrossings()) == (*currentBucket).end()) {
+            //If the key is not present
+            // cout << "Bucket: " << currentBucket << " node: " << i << " Crossings: " << Nodes[i].getCrossings() << " Not present" << endl;
+
+            //Create a new DLLnode, whose value is the index of the node
+            //Insert this DLL node's address to the hashmap with key of crossings
+            linkedlist insertDLLNode(i);
+            (*currentBucket)[Nodes[i].getCrossings()] = &insertDLLNode;
+
+        } else {
+            //If the key is present
+            // cout << "node: " << i << " Crossings: " << Nodes[i].getCrossings() << "present" << endl;
+
+            linkedlist insertDLLNode(i);
+
+            //Get the node at that DLL and follow it until the very end.
+            linkedlist* dllNode = (*currentBucket)[Nodes[i].getCrossings()];
+            while ((*dllNode).getNext() != nullptr) {
+                dllNode = dllNode->getNext();
+            }
+
+            //We should be at the last node
+            //Set this node to the next DLLNode and attach the pointer references
+            (*dllNode).setNext(&insertDLLNode);
+            insertDLLNode.setPrev(dllNode);
+
+        }
+    }
+
 
     //Select the biggest gain and move it to the other side
 
