@@ -185,6 +185,50 @@ int calculateAllGains(vector<Node>* Nodes, vector<Net>* Nets) {
     return cutsize;
 }
 
+void storeInBuckets(unordered_map<int, linkedlist*>* leftBucket, unordered_map<int, linkedlist*>* rightBucket, vector<Node>* Nodes) {
+    unordered_map<int, linkedlist*> *currentBucket; //Used to effectively swap between the two buckets
+    //Seperate the nodes out to the buckets, dependant on parition and gain.
+    for (int i = 0; i < numNodes; i++) {
+        
+        if ((*Nodes)[i].whichPartition() == 1) {
+            //If the partition is the left
+            currentBucket = leftBucket;
+        } else {
+            //If the partition is on the right
+            currentBucket = rightBucket;
+        }
+
+        //currentBucket is now set to either the left or right bucket, depending on which parition the current node is
+        if((*currentBucket).find((*Nodes)[i].getCrossings()) == (*currentBucket).end()) {
+            //If the key is not present
+            // cout << "Bucket: " << currentBucket << " node: " << i << " Crossings: " << Nodes[i].getCrossings() << " Not present" << endl;
+
+            //Create a new DLLnode, whose value is the index of the node
+            //Insert this DLL node's address to the hashmap with key of crossings
+            linkedlist insertDLLNode(i);
+            (*currentBucket)[(*Nodes)[i].getCrossings()] = &insertDLLNode;
+
+        } else {
+            //If the key is present
+            // cout << "node: " << i << " Crossings: " << Nodes[i].getCrossings() << "present" << endl;
+
+            linkedlist insertDLLNode(i);
+
+            //Get the node at that DLL and follow it until the very end.
+            linkedlist* dllNode = (*currentBucket)[(*Nodes)[i].getCrossings()];
+            while ((*dllNode).getNext() != nullptr) {
+                dllNode = dllNode->getNext();
+            }
+
+            //We should be at the last node
+            //Set this node to the next DLLNode and attach the pointer references
+            (*dllNode).setNext(&insertDLLNode);
+            insertDLLNode.setPrev(dllNode);
+
+        }
+    }
+}
+
 int main() {
     string benchmark = "superblue18";
     string filepath = "../Benchmarks/" + benchmark + "/" + benchmark;
@@ -237,48 +281,8 @@ int main() {
     unordered_map<int, linkedlist*> leftBucket; //Left bucket is considered 0
     unordered_map<int, linkedlist*> rightBucket;    //Right bucket is considered 1
 
+    storeInBuckets(&leftBucket, &rightBucket, &Nodes);
     
-    unordered_map<int, linkedlist*> *currentBucket; //Used to effectively swap between the two buckets
-    //Seperate the nodes out to the buckets, dependant on parition and gain.
-    for (int i = 0; i < numNodes; i++) {
-        
-        if (Nodes[i].whichPartition() == 1) {
-            //If the partition is the left
-            currentBucket = &leftBucket;
-        } else {
-            //If the partition is on the right
-            currentBucket = &rightBucket;
-        }
-
-        //currentBucket is now set to either the left or right bucket, depending on which parition the current node is
-        if((*currentBucket).find(Nodes[i].getCrossings()) == (*currentBucket).end()) {
-            //If the key is not present
-            // cout << "Bucket: " << currentBucket << " node: " << i << " Crossings: " << Nodes[i].getCrossings() << " Not present" << endl;
-
-            //Create a new DLLnode, whose value is the index of the node
-            //Insert this DLL node's address to the hashmap with key of crossings
-            linkedlist insertDLLNode(i);
-            (*currentBucket)[Nodes[i].getCrossings()] = &insertDLLNode;
-
-        } else {
-            //If the key is present
-            // cout << "node: " << i << " Crossings: " << Nodes[i].getCrossings() << "present" << endl;
-
-            linkedlist insertDLLNode(i);
-
-            //Get the node at that DLL and follow it until the very end.
-            linkedlist* dllNode = (*currentBucket)[Nodes[i].getCrossings()];
-            while ((*dllNode).getNext() != nullptr) {
-                dllNode = dllNode->getNext();
-            }
-
-            //We should be at the last node
-            //Set this node to the next DLLNode and attach the pointer references
-            (*dllNode).setNext(&insertDLLNode);
-            insertDLLNode.setPrev(dllNode);
-
-        }
-    }
 
 
     //Select the biggest gain and move it to the other side
