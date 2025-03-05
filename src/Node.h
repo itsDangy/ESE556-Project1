@@ -13,7 +13,7 @@ private:
     int height_;
     int area; // area of the cell.  
     bool terminal_;
-    bool partition; 
+    bool partition;     //This is going to be left or right (0 or left, 1 for right)
     vector<int> connectedNets; // a vector of index of nets connected to this given node as they are all sequentially given in the .nets file.
     
 public:
@@ -32,11 +32,14 @@ public:
     int getHeight() { return height_; }
     int getArea() { return area; }
     bool isTerminal() { return terminal_; }
-    bool whichPartition() {return partition;} // returns 1 if partition 1. 
     void addNet(int i) { connectedNets.push_back(i); }
-    void movePartition() {partition = !partition;} // changes the partition of the node.
+    
     vector<int> getConnectedNets() { return connectedNets; }
 
+    //Related to partitions
+    void movePartition() {partition = !partition;} // changes the partition of the node.
+    bool whichPartition() {return partition;} // returns 1 if partition 1. 
+    void setPartition(bool side) {partition = side;}    //Sets the partition to whatever the input is
 };
 
 #endif //Node_H

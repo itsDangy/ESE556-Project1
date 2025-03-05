@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <unordered_map>
 
 #include "Node.h"
 #include "Net.h"
@@ -14,6 +15,12 @@ int numNodes = -1;
 int numTerm = -1;
 int numNets = -1;
 int offset;
+
+struct timePoint { 
+    Node lockedNode; 
+    int cutSize; 
+    float area;
+};
 
 vector<Node> parseNodes(string filename) {
     ifstream NodeFile(filename);
@@ -119,6 +126,7 @@ int main() {
     string benchmark = "superblue18";
     string filepath = "../Benchmarks/" + benchmark + "/" + benchmark;
 
+    //Parse the nodes
     vector<Node> Nodes;
     Nodes = parseNodes(filepath+".nodes");
     cout << Nodes.size() << endl;
@@ -133,6 +141,72 @@ int main() {
     for (auto i : test) {
         cout << i << " ";
     }
+
+    //Check the area constructor
+    // for (int i = 146; i < 166; i++) {
+    //     cout << Nodes[i].getArea() << endl;
+    // }
+
+    //At this time, we should have everything parsed into the correct data structures
+
+    //Create 2 buckets -- left and right
+    //This bucket is a unordered map (Hashmap), whos key is an int going form PMAX to -PMAX.
+    //The value will be the pointer to a doubly linked list (DLL). The Data for this DLL will be an int, which will
+    //reference the index in vector Nodes.
+
+    unordered_map<int, int> leftBucket;
+    unordered_map<int, int> rightBucket;
+
+    //Creates the timeline necessary for FM to climb hills and work
+    //The index will be the iteration number, while the timePoint struct holds the relevant information for that paticular iteration
+    vector<timePoint> timeline;
+
+    //Create the inital cut
+    //Randomly assign all nodes a status of either left or right
+    srand(time(0));
+    for (int i = 0; i < numNodes; i++) {
+        Nodes[i].setPartition(rand() % 2);
+    }
+
+    //For all terminal nodes, ensure that they will no longer move.
+
+
+
+    //Check for cut nodes
+    /*
+    This entire thing should be O(MN) time
+    For each net, compare the first node to every other node connected to the net.
+        If it crosses, then inc the global cutsize
+        And inc node_cut in type node
+            //This is to keep track to calculate the gain
+
+
+    for (each net i) {
+        for (each node j) {
+            Compare the node[0] of net[i] to node[i]
+            If it crosses, 
+                globalCutsize++
+                set bool cut (in net.h) to true
+                for every node on the net:
+                    increment the cut (Number of crossings)
+                    inc the gain
+
+
+
+
+            getNet will return a vector of ints
+            These represent the nodes connected to the net
+            nodes[nets[i].getNet()[j]].whichPartition() =
+        
+        }
+    }
+
+    After we have calculated all the gains, we can finally add this onto the bucks using parition and gain(Per node)
+    
+    */
+
+
+
 
     return 0;
 }
