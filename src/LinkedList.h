@@ -9,12 +9,12 @@ private:
     linkedlist* next_;
     linkedlist* prev_;
     int nodeID_; // just an index of the respective node in the vector nodes. 
-    bool pin_; // to know if a node is a pin or a node(Terminal or non terminal)
+    //bool term_; // to know if a node is a pin or a node(Terminal or non terminal)
 public:
-    linkedlist(int nodeID, bool pin = false) { 
+    linkedlist(int nodeID) { 
         nodeID_ = nodeID;
         next_ = prev_ = nullptr;
-        pin_ = pin;
+        //term_ = term;
     };
     ~linkedlist(){};
 
@@ -23,7 +23,7 @@ public:
     int getNodeID() { return nodeID_; };
     void setNext(linkedlist* next) { next_ = next; };
     void setPrev(linkedlist* prev) { prev_ = prev; };
-    bool isPin() { return pin_; };
+    //bool isTerm() { return term_; };
 };
 
 #endif
