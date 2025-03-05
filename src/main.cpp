@@ -10,6 +10,11 @@
 
 using namespace std;
 
+int numNodes = -1;
+int numTerm = -1;
+int numNets = -1;
+int offset;
+
 vector<Node> parseNodes(string filename) {
     ifstream NodeFile(filename);
     if(!NodeFile.is_open()) {
@@ -19,7 +24,6 @@ vector<Node> parseNodes(string filename) {
 
     vector<Node> Nodes;
     char const* digits = "0123456789";
-    int numNodes = -1;
     string line;
 
     getline(NodeFile,line); //gets first line
@@ -32,6 +36,7 @@ vector<Node> parseNodes(string filename) {
     }
    
     getline(NodeFile,line); //gets NumTerminals line (not needed)
+    numTerm = stoi(line.substr(line.find_first_of(digits)));
 
     //Puts nodes into vector
     while (Nodes.size()<numNodes||!NodeFile.eof()) {
@@ -41,18 +46,18 @@ vector<Node> parseNodes(string filename) {
         string nodeID;
         int width;
         int height;
-        bool moveable = true;
+        bool terminal = false;
         iss >> nodeID >> width >> height;
         if(line.find("terminal") != string::npos)
-            moveable = false;
-        Nodes.push_back(Node(nodeID,width,height,moveable));
+            terminal = true;
+        Nodes.push_back(Node(nodeID,width,height,terminal));
     }
 
     NodeFile.close();
     return Nodes;
 }
 
-vector<Net> parseNets(string filename, vector<Node> nodes) {
+vector<Net> parseNets(string filename, vector<Node>* nodes) {
     ifstream NetFile(filename);
     if(!NetFile.is_open()) {
         cerr << filename << " not found" << endl;
@@ -61,7 +66,6 @@ vector<Net> parseNets(string filename, vector<Node> nodes) {
 
     vector<Net> Nets;
     char const* digits = "0123456789";
-    int numNets = -1;
     string line;
 
     getline(NetFile,line); //gets first line
@@ -82,17 +86,28 @@ vector<Net> parseNets(string filename, vector<Node> nodes) {
         string t;
         int numNodes;
         string netName;
+        vector<int> indicies;
         iss >> t >> t >> numNodes >> netName;
+        int netIndex = stoi(netName.substr(1));
         //cout << numNodes << " " << netName << endl;
-        vector<string> nodeList;
         for (int i = 0; i < numNodes; i++) {
             getline(NetFile,line);
-            iss << line;
+            if (line.empty() || line[0] == '#') continue;
+            stringstream iss(line);
             string nodeName;
             iss >> nodeName;
-            nodeList.push_back(nodeName);
+            int nodeIndex = stoi(nodeName.substr(1));
+            if (nodeName.find("p") != string::npos)
+            {
+                nodeIndex += offset;
+                indicies.push_back(nodeIndex);
+            }
+            else
+                indicies.push_back(nodeIndex);
+            
+            (*nodes)[nodeIndex].addNet(netIndex);
         }
-        Net net(netName, nodeList);
+        Net net(netName, indicies);
         Nets.push_back(net);
     }
 
@@ -107,10 +122,17 @@ int main() {
     vector<Node> Nodes;
     Nodes = parseNodes(filepath+".nodes");
     cout << Nodes.size() << endl;
+    offset = numNodes - numTerm;
 
     vector<Net> Nets;
-    Nets = parseNets(filepath+".nets", Nodes);
+    Nets = parseNets(filepath+".nets", &Nodes);
     cout << Nets.size() << endl;
+
+    cout << Nodes[45].getID() << endl;
+    vector<int> test = Nodes[45].getConnectedNets();
+    for (auto i : test) {
+        cout << i << " ";
+    }
 
     return 0;
 }
