@@ -171,6 +171,52 @@ int main() {
     //For all terminal nodes, ensure that they will no longer move.
 
 
+    int cutsize = 0;
+    bool flag = false;  //Used to see if we should break look and increment the crossings for the nets
+
+    for (size_t i = 0; i < Nets.size(); i++) {
+        int node0Idx = Nets[i].getConnectedNodes()[0];
+        for (size_t j = 0; j < (Nets[i].getConnectedNodes()).size(); j++) {
+            //Visit each node on the net and compare it to the first. 
+            //If it crosses the partition (XOR)
+                //globalCutsize++
+                //set the bool cut (in net.h) to true
+                //Break the for (j) loop
+            int nodejIdx = Nets[i].getConnectedNodes()[j];
+            if (Nodes[node0Idx].whichPartition() ^ Nodes[nodejIdx].whichPartition()) {
+                cutsize++;
+                Nets[i].cut = 1;
+                flag = true;
+                break;
+            }
+        }
+
+        //if flag is true
+        if (flag == true) {
+            for (size_t j = 0; j < (Nets[i].getConnectedNodes()).size(); j++) {
+                //Loop through every node on the net and increment that node's cut size
+                int nodejIdx = Nets[i].getConnectedNodes()[j];
+                Nodes[nodejIdx].incCrossings();
+            }
+        }
+    }
+
+    cout << "\nTotal Global Cutsize: " << cutsize << endl;
+    cout << "offset" << offset << endl;
+
+    //Output everything connected to the 5th net.
+    int testNode = 5;
+    cout << "Net: " << Nets[testNode].getName() <<" has " << (Nets[testNode].getConnectedNodes()).size() << " nodes connected. isCut(): " << Nets[testNode].cut << endl;
+
+    for (size_t j = 0; j < (Nets[testNode].getConnectedNodes()).size(); j++) {
+        int nodejIdx = Nets[testNode].getConnectedNodes()[j];
+        cout << "Connected node [" << nodejIdx << "] has ID: " << Nodes[nodejIdx].getID() << " and is partition: " << Nodes[nodejIdx].whichPartition();
+        if (nodejIdx > offset) {
+            cout << " which is p" << nodejIdx - offset << endl;
+        } else {
+            cout << endl;
+        }
+    }
 
     //Check for cut nodes
     /*
@@ -190,19 +236,9 @@ int main() {
                 for every node on the net:
                     increment the cut (Number of crossings)
                     inc the gain
-
-
-
-
-            getNet will return a vector of ints
-            These represent the nodes connected to the net
-            nodes[nets[i].getNet()[j]].whichPartition() =
-        
         }
     }
-
     After we have calculated all the gains, we can finally add this onto the bucks using parition and gain(Per node)
-    
     */
 
 
