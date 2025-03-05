@@ -8,9 +8,10 @@ class linkedlist
 private:
     linkedlist* next_;
     linkedlist* prev_;
-    string nodeID_;
+    int nodeID_; // just an index of the respective node in the vector nodes. 
+    bool pin; // to know if a node is a pin or a node(Terminal or non terminal)
 public:
-    linkedlist(string nodeID) { 
+    linkedlist(int nodeID) { 
         nodeID_ = nodeID;
         next_ = prev_ = nullptr;
     };
@@ -18,7 +19,7 @@ public:
 
     linkedlist* getNext() { return next_; };
     linkedlist* getPrev() { return prev_; };
-    string getNodeID() { return nodeID_; };
+    int getNodeID() { return nodeID_; };
     void setNext(linkedlist* next) { next_ = next; };
     void setPrev(linkedlist* prev) { prev_ = prev; };
 };
