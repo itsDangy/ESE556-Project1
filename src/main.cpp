@@ -32,6 +32,7 @@ vector<Node> parseNodes(string filename) {
     vector<Node> Nodes;
     char const* digits = "0123456789";
     string line;
+    bool flag = 0;
 
     getline(NodeFile,line); //gets first line
 
@@ -55,6 +56,10 @@ vector<Node> parseNodes(string filename) {
         int height;
         bool terminal = false;
         iss >> nodeID >> width >> height;
+        if(nodeID.find("p") != string::npos&&flag == 0) {
+            flag = 1;
+            offset = Nodes.size();
+        }
         if(line.find("terminal") != string::npos)
             terminal = true;
         Nodes.push_back(Node(nodeID,width,height,terminal));
@@ -130,7 +135,6 @@ int main() {
     vector<Node> Nodes;
     Nodes = parseNodes(filepath+".nodes");
     cout << Nodes.size() << endl;
-    offset = numNodes - numTerm;
 
     vector<Net> Nets;
     Nets = parseNets(filepath+".nets", &Nodes);
