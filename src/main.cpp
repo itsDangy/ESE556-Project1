@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <map>
 #include <limits.h>
+#include <cstring>
 
 #include "Node.h"
 #include "Net.h"
@@ -237,18 +238,18 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
             //If the partition is the left
             currentBucket = leftBucket;
             (*lSize)++;
-            cout << "Left  ";
+            // cout << "Left  ";
         } else {
             //If the partition is on the right
             currentBucket = rightBucket;
             (*rSize)++;
-            cout << "Right ";
+            // cout << "Right ";
         }
 
         //Calculate the gain (See function calculateCrossings for more information)
         //gain = 2*crossings - totalNets
         int gain = 2*(*Nodes)[i].getCrossings() - (*Nodes)[i].getConnectedNets().size();
-        cout << "Gain of " << gain;
+        // cout << "Gain of " << gain;
 
         //Create a new DLLnode, whose value is the index of the node
         // Allocate memory on the heap so it persists after the loop iteration
@@ -261,10 +262,10 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
 
             //Insert this DLL node's address to the hashmap with key of crossings
             (*currentBucket)[gain] = insertDLLNode;
-            cout << " No key" << endl;
+            // cout << " No key" << endl;
         } else {
             //If the key is present
-            cout << " w/ key" << endl;
+            // cout << " w/ key" << endl;
 
             //Get the node at that DLL and follow it until the very end.
             linkedlist* dllNode = (*currentBucket)[gain];
@@ -369,11 +370,24 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
             cout << "currentNet: " << currentNet << endl;
             // j refers to the index of the current node
             for (int j = 0; j < (*Nets)[currentNet].getConnectedNodes().size(); j++) {
-                int oldGain = (2 * ((*Nodes)[j].getCrossings())) - (*Nodes)[j].getConnectedNets().size();
+                // int oldGain = (2 * ((*Nodes)[j].getCrossings())) - (*Nodes)[j].getConnectedNets().size();
+
+                //Looking for is the index of the node that we're now looking for
+                int lookingFor = (*Nets)[currentNet].getConnectedNodes()[j];
+                int oldGain = (2 * (*Nodes)[lookingFor].getCrossings()) - (*Nodes)[lookingFor].getConnectedNets().size();
+                map<int, linkedlist*>* nodeUpdaterBucket;
+
+                if ((*Nodes)[lookingFor].whichPartition() == 1) {
+                    //The node we are looking for is in the right bucket
+                    nodeUpdaterBucket = &leftBucket;
+                } else {
+                    //The node are looking for is in the left bucket
+                    nodeUpdaterBucket = &rightBucket;
+                }
 
                 // Find the jnode and remove it from the bucket structure
                 // Loop to the end of the linked list
-                linkedlist* nodeUpdater = (*chosenBucket)[oldGain];
+                linkedlist* nodeUpdater = (*nodeUpdaterBucket)[oldGain];
                 if (nodeUpdater == nullptr) {
                     cerr << "Error: nodeUpdater is nullptr" << endl;
                     exit(EXIT_FAILURE);
@@ -381,11 +395,9 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
 
                 // Loop until the end of the node
                 // Or until we find the index we're looking for
-                int lookingFor = (*Nets)[currentNet].getConnectedNodes()[j];
                 while (nodeUpdater->getNodeID() != lookingFor) {
-                    cout<<"Looking for node " <<lookingFor<<endl;
+                    cout<<" Looking for node " << lookingFor << "Currently at: " << nodeUpdater->getNodeID() << endl;
                     cout << "old gain is: " << oldGain << endl;
-                    cout << nodeUpdater->getNodeID() << endl;
                     if (nodeUpdater->getNext() == nullptr) {
                         //If this triggers, we are at the end of the list
                         cerr << "Error: nodeUpdater->getNext() is nullptr" << endl;
@@ -429,7 +441,7 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                 }
                 int newGain = 2 * ((*Nodes)[j].getCrossings()) - (*Nodes)[j].getConnectedNets().size();
 
-// Place the selected node back into the correct bucket
+                // Place the selected node back into the correct bucket
                 if ((*chosenBucket).find(newGain) != (*chosenBucket).end()) {
                     // If the key exists, add it to the beginning of the linked list
                     nodeUpdaterNext = (*chosenBucket)[newGain]; // Here, I'm reusing nodeUpdaterNext
@@ -459,11 +471,18 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     // This is the most efficient cutsize of the current FM pass
 }
 
-int main() {
-    string benchmark = "superblue18";
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        cerr << "Exactly one argument required -- name of test vector." << endl;
+        exit(EXIT_FAILURE);
+    }
 
-    cout << "Which benchmark would you like to run? (Blank will run superblue18)" << endl;
-    cin >> benchmark;
+    string benchmark = argv[1];
+
+    // string benchmark = "superblue18";
+
+    // cout << "Which benchmark would you like to run? (Blank will run superblue18)" << endl;
+    // cin >> benchmark;
 
     string ifilepath = "../Benchmarks/" + benchmark + "/" + benchmark;
     string ofilepath = "../Output/" + benchmark + "_Output.txt";
