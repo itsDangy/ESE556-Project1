@@ -448,6 +448,8 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                     (*chosenBucket)[newGain] = nodeUpdater;
                 }
             }
+            if(inc_cutsize){cutsize++;}
+            if(dec_cutsize){cutsize--;}
         }
         cout<< "cutsize after the pass" << cutsize << endl; 
     }
