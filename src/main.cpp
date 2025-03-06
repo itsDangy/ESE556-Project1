@@ -18,7 +18,7 @@ int numNets = -1;
 int offset;
 
 struct timePoint { 
-    Node lockedNode; 
+    int lockedNode; 
     int cutSize; 
     float area;
 };
@@ -170,7 +170,7 @@ void writeOutput(string filename, int cutsize, vector<Node> Nodes) {
     OutputFile.close();
 }
 
-void calculateCrossings(vector<Node>* Nodes, vector<Net>* Nets) {
+int calculateCrossings(vector<Node>* Nodes, vector<Net>* Nets) {
     int cutsize = 0;
     bool flag = false;  // Used to see if we should break loop and increment the crossings for the nets
 
@@ -196,63 +196,17 @@ void calculateCrossings(vector<Node>* Nodes, vector<Net>* Nets) {
                 if ((*Nodes)[nodejIdx].whichPartition() ^ (*Nodes)[nodekIdx].whichPartition()) {
                     //In here, there is a crossing.
                     crossings++;
+                    flag = true;
                 }
             }
             (*Nodes)[nodejIdx].setCrossings(crossings);
         }
+        //We consider cutsize on a per net basis, so it goes here
+        if (flag) {
+            cutsize++;
+        }
     }
-
-
-
-
-
-
-
-    // for (size_t i = 0; i < Nets->size(); i++) {
-    //     int node0Idx = (*Nets)[i].getConnectedNodes()[0];
-    //     for (size_t j = 0; j < (*Nets)[i].getConnectedNodes().size(); j++) {
-    //         // Visit each node on the net and compare it to the first. 
-    //         // If it crosses the partition (XOR)
-    //         // globalCutsize++
-    //         // set the bool cut (in net.h) to true
-    //         // Break the for (j) loop
-    //         int nodejIdx = (*Nets)[i].getConnectedNodes()[j];
-    //         if ((*Nodes)[node0Idx].whichPartition() ^ (*Nodes)[nodejIdx].whichPartition()) {
-    //             cutsize++;
-    //             flag = true;
-    //             break;
-    //         }
-    //     }
-
-    //     // if flag is true
-    //     if (flag == true) {
-    //         for (size_t j = 0; j < (*Nets)[i].getConnectedNodes().size(); j++) {
-    //             // Loop through every node on the net and increment that node's cut size
-    //             int nodejIdx = (*Nets)[i].getConnectedNodes()[j];
-    //             (*Nodes)[nodejIdx].incCrossings();
-    //         }
-    //     }
-    // }
-
-    // cout << "\nTotal Global Cutsize: " << cutsize << endl;
-    // cout << "offset" << offset << endl;
-
-    // // Used for testing 
-    // int testNode = 5;
-    // cout << "Net: " << (*Nets)[testNode].getName() << " has " << (*Nets)[testNode].getConnectedNodes().size() << " nodes connected." << endl;
-
-    // for (size_t j = 0; j < (*Nets)[testNode].getConnectedNodes().size(); j++) {
-    //     int nodejIdx = (*Nets)[testNode].getConnectedNodes()[j];
-    //     cout << "Connected node [" << nodejIdx << "] has ID: " << (*Nodes)[nodejIdx].getID() << " and is partition: " << (*Nodes)[nodejIdx].whichPartition();
-    //     if (nodejIdx > offset) {
-    //         cout << " which is p" << nodejIdx - offset << endl;
-    //     } else {
-    //         cout << endl;
-    //     }
-    //     cout << "\t" << "Also has a gain of: " << (*Nodes)[nodejIdx].getCrossings() << endl;
-    // }
-
-    // return cutsize;
+    return cutsize;
 }
 
 void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* rightBucket, vector<Node>* Nodes, int* lSize, int* rSize) {
@@ -308,11 +262,12 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
 
 int main() {
     string benchmark = "superblue18";
-    string ifilepath = "../Benchmarks/" + benchmark + "/" + benchmark;
-    string ofilepath = "../Output/" + benchmark + "_Output.txt";
 
     cout << "Which benchmark would you like to run? (Blank will run superblue18)" << endl;
     cin >> benchmark;
+
+    string ifilepath = "../Benchmarks/" + benchmark + "/" + benchmark;
+    string ofilepath = "../Output/" + benchmark + "_Output.txt";
 
     //Parse the nodes
     vector<Node> Nodes;
@@ -349,9 +304,8 @@ int main() {
 
     //For all terminal nodes, ensure that they will no longer move.
 
-
     //Determine the gains, store the current gains in the Nodes structure.
-    calculateCrossings(&Nodes, &Nets);
+    int cutsize = calculateCrossings(&Nodes, &Nets);
 
     //Create 2 buckets -- left and right
     //This bucket is a unordered map (Hashmap), whos key is an int going form PMAX to -PMAX.
@@ -372,17 +326,19 @@ int main() {
         Repeat the following until both LBucket and RBucket is empty
         Choose the side with the largest key (and thus the largest gain) Using myMap.begin()->first
         Loop to the end of the linked list
-        move that cell to the other side
         Remove that cell from the bucket and place it on the timeline
+        move that cell to the other side
         For all nets connected to that cell:
             For all nodes connected to that net:
                 Recalculate the node crossings (This can be a -1 if the node is now on the same side, +1 if the node is now on the other side)
-                Remove the node form th ebucket
+                Remove the node form the ebucket
                 Place the node in the reclaulted gain bucket
     */
     int gainSelector = 0;    //0 if left, 1 if right
 
     while (leftBucket.size() != 0 || rightBucket.size() != 0) {
+
+        //Choose the side with the largest key
         if (leftBucket.rbegin()->first - rightBucket.rbegin()->first >= 0) {
             //Left bucket is bigger
             gainSelector = leftBucket.rbegin()->first;
@@ -395,19 +351,105 @@ int main() {
 
         cout << "gain is: " << gainSelector << endl;
 
-        // //Get the node at that DLL and follow it until the very end.
-        // linkedlist* dllNode = (*chosenBucket)[gain];
-        // if (dllNode != nullptr) {
-        //     while (dllNode->getNext() != nullptr) {
-        //         dllNode = dllNode->getNext();
-        //     }
-        //     //We should be at the last node
-        //     //Set this node to the next DLLNode and attach the pointer references
-        //     dllNode->setNext(insertDLLNode);
-        //     insertDLLNode->setPrev(dllNode);
-        // }
+        //Loop to the end of the linked list
+        linkedlist* dllNode = (*chosenBucket)[gainSelector];
+        int selectedNode = -1;
+        if (dllNode == nullptr) {
+            exit(EXIT_FAILURE);
+        }
+        //Loop to the end of the node
+        while (dllNode->getNext() != nullptr) {
+            dllNode = dllNode->getNext();
+        }
+        //At this point we are at the last node
+        selectedNode = (*dllNode).getNodeID(); 
+        free(dllNode);
+        
+        linkedlist* prevNode = dllNode->getPrev();
+        prevNode->setNext(nullptr);
+
+        struct timePoint point;
+        point.lockedNode = selectedNode;
+        point.cutSize = cutsize;
+        //Also do area ratio, but i don't feel like doing that right now
+        timeline.push_back(point);
+
+        Nodes[selectedNode].movePartition();
+        //i refers to the index of the current net
+        for (int i = 0; i < Nodes[selectedNode].getConnectedNets().size(); i++) {
+            int currentNet = Nodes[selectedNode].getConnectedNets()[i];
+            //j refers to the index of the current node
+            for (int j = 0; j < Nets[currentNet].getConnectedNodes().size(); j++) {
+                int oldGain = 2*(Nodes[j].getCrossings()) - Nodes[j].getConnectedNets().size();
+
+                //Find the jnode and remove it from the bucket structure
+                //Loop to the end of the linked list
+                linkedlist* nodeUpdater = (*chosenBucket)[oldGain];
+                if (nodeUpdater == nullptr) {
+                    exit(EXIT_FAILURE);
+                }
+
+                //Loop until the end of the node
+                //Or until we find the index we're looking for
+                int lookingFor = Nets[currentNet].getConnectedNodes()[j];
+                while (nodeUpdater->getNodeID() != lookingFor) {
+                    if (nodeUpdater->getNext() != nullptr) {
+                        exit(EXIT_FAILURE);
+                    }
+                    nodeUpdater = nodeUpdater->getNext();
+                }
+                //nodeUpdater now has the node we're trying to move
+                //Update the DLL to remove nodeUpdater from the area
+
+                //If nodeUpdater.getPrev() is nullptr, it is the first.
+                //If nodeUpdater.getNext() is nullptr, it is the last.
+                //If it is both, remove the key entierly from the map
+                linkedlist* nodeUpdaterPrev = nodeUpdater->getPrev();
+                linkedlist* nodeUpdaterNext = nodeUpdater->getNext();
+
+                //Set nodeupdater to default nullptrs for both
+                nodeUpdater.setPrev(nullptr);
+                nodeUpdater.setNext(nullptr);
+
+                if (nodeUpdaterPrev == nullptr && nodeUpdaterNext == nullptr) {
+                    (*chosenBucket).erase(oldGain);
+                } else if (nodeUpdaterPrev == nullptr && nodeUpdaterNext != nullptr) {
+                    //This is the first node, link this to the head in the key
+                    (*chosenBucket)[oldGain] = nodeUpdaterNext;
+                } else if (nodeUpdaterPrev != nullptr && nodeUpdaterNext == nullptr) {
+                    //This is the last node, simply remove the previous connection
+                    nodeUpdaterPrev.setNext(nullptr);
+                } else {
+                    //Standard case, simply stitch the DLL back together
+                    nodeUpdaterPrev->setNext(nodeUpdaterNext);
+                    nodeUpdaterNext->setPrev(nodeUpdaterPrev);
+                }
 
 
+
+                if (Nodes[selectedNode].whichPartition() ^ Nodes[j].whichPartition()) {
+                    //They are different sides
+                    Nodes[j].incCrossings();
+                } else {
+                    //they are same sides
+                    Nodes[j].decCrossings();
+                }
+                int newGain = 2*(Nodes[j].getCrossings()) - Nodes[j].getConnectedNets().size();
+
+
+                //Place the selected node back into the correct bucket
+                if ((*chosenBucket).find(newGain) != (*chosenBucket).end()) {
+                    //If the key exists, add it to the beginning of the linked list
+                    nodeUpdaterNext = (*chosenBucket)[newGain]; //Here, I'm reusing nodeUpdaterNext
+                    (*chosenBucket)[newGain] = nodeUpdater;
+                    nodeUpdater.setNext(nodeUpdaterNext);
+
+                } else {
+                    //If the key does not exist, add it to the map
+                    (*chosenBucket)[newGain] = nodeUpdater;
+                }
+            }
+        }
     }
     
 

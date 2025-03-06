@@ -1,6 +1,6 @@
 UCLA nodes 1.0
-NumNodes : 25
-NumTerminals : 9
+NumNodes : 100
+NumTerminals : 33
 o0	7	3
 o1	2	5
 o2	1	7
@@ -17,12 +17,87 @@ o12	1	11
 o13	4	11
 o14	11	8
 o15	11	4
-o0	8	10	terminal
-p0	8	9	terminal_NI
-p1	3	11	terminal_NI
-p2	8	11	terminal_NI
-p3	5	2	terminal_NI
-p4	1	11	terminal_NI
-p5	5	10	terminal_NI
-p6	8	7	terminal_NI
-p7	9	7	terminal_NI
+o16	8	10
+o17	8	9
+o18	3	11
+o19	8	11
+o20	5	2
+o21	1	11
+o22	5	10
+o23	8	7
+o24	9	7
+o25	3	3
+o26	8	7
+o27	7	6
+o28	6	8
+o29	5	5
+o30	5	4
+o31	7	10
+o32	11	3
+o33	5	2
+o34	1	11
+o35	10	5
+o36	1	11
+o37	2	3
+o38	7	10
+o39	8	2
+o40	5	10
+o41	4	10
+o42	3	11
+o43	4	8
+o44	7	9
+o45	10	9
+o46	10	5
+o47	6	10
+o48	6	10
+o49	9	4
+o50	9	8
+o51	6	8
+o52	5	8
+o53	8	9
+o54	6	2
+o55	11	8
+o56	9	1
+o57	7	11
+o58	9	10
+o59	5	3
+o60	5	4
+o61	11	4
+o62	6	3
+o63	11	9
+o64	11	6
+o65	1	6
+o66	11	7
+o67	11	4	terminal
+o68	1	8	terminal
+o69	11	6	terminal
+o70	7	10	terminal
+o71	11	5	terminal
+p0	10	6	terminal_NI
+p1	4	8	terminal_NI
+p2	3	9	terminal_NI
+p3	8	5	terminal_NI
+p4	10	5	terminal_NI
+p5	6	2	terminal_NI
+p6	8	5	terminal_NI
+p7	11	7	terminal_NI
+p8	9	9	terminal_NI
+p9	1	8	terminal_NI
+p10	4	10	terminal_NI
+p11	1	2	terminal_NI
+p12	6	9	terminal_NI
+p13	5	1	terminal_NI
+p14	7	5	terminal_NI
+p15	3	3	terminal_NI
+p16	10	7	terminal_NI
+p17	8	10	terminal_NI
+p18	2	4	terminal_NI
+p19	4	9	terminal_NI
+p20	9	9	terminal_NI
+p21	10	5	terminal_NI
+p22	1	9	terminal_NI
+p23	9	9	terminal_NI
+p24	5	7	terminal_NI
+p25	5	8	terminal_NI
+p26	5	3	terminal_NI
+p27	10	8	terminal_NI
