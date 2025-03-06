@@ -5,6 +5,7 @@
 #include <sstream>
 #include <unordered_map>
 #include <map>
+#include <limits.h>
 
 #include "Node.h"
 #include "Net.h"
@@ -309,6 +310,7 @@ int main() {
     //Creates the timeline necessary for FM to climb hills and work
     //The index will be the iteration number, while the timePoint struct holds the relevant information for that paticular iteration
     vector<timePoint> timeline;
+    int lowestCutsize = INT_MAX;    //This will be used and updated as we find the lowest cutsize
 
     //Create the inital cut
     //Randomly assign all nodes a status of either left or right
@@ -381,22 +383,16 @@ int main() {
         //At this point we are at the last node
         selectedNode = (*dllNode).getNodeID(); 
         
-        cout << "test" << endl;
         linkedlist* prevNode = dllNode->getPrev();
-        cout << "HELLO PLEASE" << endl;
         if (prevNode != nullptr) {
             prevNode->setNext(nullptr);
         }
-        cout << "FDSFSD" << endl;
         free(dllNode);
-        cout << "test2" << endl;
 
         struct timePoint point;
         point.lockedNode = selectedNode;
         point.cutSize = cutsize;
         point.ratio = getAreaRatio(Nodes); 
-
-        //Also do area ratio, but i don't feel like doing that right now
         timeline.push_back(point);
 
         
@@ -478,7 +474,13 @@ int main() {
             }
         }
     }
-    
+
+
+    //Here, all cells are now fixed and emptied out of the buckets.
+    //Roll back the changes from the timeline one by one until we've reached the lowest cutsize during this iteration
+    for (int i = timeline.size(); i > 0; i--) {
+        Nodes[timeline[i].lockedNode].movePartition();
+    }
 
 
 
