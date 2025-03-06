@@ -311,6 +311,9 @@ int main() {
     string ifilepath = "../Benchmarks/" + benchmark + "/" + benchmark;
     string ofilepath = "../Output/" + benchmark + "_Output.txt";
 
+    cout << "Which benchmark would you like to run? (Blank will run superblue18)" << endl;
+    cin >> benchmark;
+
     //Parse the nodes
     vector<Node> Nodes;
     Nodes = parseNodes(ifilepath+".nodes");
