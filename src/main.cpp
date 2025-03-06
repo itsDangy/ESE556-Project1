@@ -149,13 +149,19 @@ void writeOutput(string filename, int cutsize, vector<Node> Nodes) {
             rightArea += Nodes[i].getArea();
         }
     }
+    float ratio = (float)leftArea/rightArea;
+    OutputFile << "Partition Ratio: " << ratio << endl;
 
-    OutputFile << "Partition 1: " << leftNodes.size() << "Area: " << leftArea << endl;
+    int totalArea = leftArea + rightArea;
+    float leftPercent = (float)leftArea/totalArea * 100;
+    float rightPercent = (float)rightArea/totalArea * 100;
+
+    OutputFile << "Partition 1: " << leftNodes.size() << "\tArea: " << leftArea << " - " << leftPercent << "%" << endl;
     for (auto i : leftNodes) {
         OutputFile << i << endl;
     }
 
-    OutputFile << "Partition 2: " << rightNodes.size() << "Area: " << rightArea <<endl;
+    OutputFile << "Partition 2: " << rightNodes.size() << "\tArea: " << rightArea << " - " << rightPercent << "%" << endl;
     for (auto i : rightNodes) {
         OutputFile << i << endl;
     }
