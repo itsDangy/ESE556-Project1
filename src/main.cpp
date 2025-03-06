@@ -357,14 +357,17 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
         point.cutSize = cutsize;
         point.ratio = getAreaRatio(*Nodes); 
         timeline.push_back(point);
+        cout <<"cutsize before pass" << cutsize << endl;
 
-        
+        bool inc_cutsize, dec_cutsize; // flags that indicate if the cutsize should be incremented or decremented. 
 
         (*Nodes)[selectedNode].movePartition();
         //i refers to the index of the current net
         for (int i = 0; i < (*Nodes)[selectedNode].getConnectedNets().size(); i++) {
             int currentNet = (*Nodes)[selectedNode].getConnectedNets()[i];
             //j refers to the index of the current node
+            inc_cutsize = false; 
+            dec_cutsize = false; 
             for (int j = 0; j < (*Nets)[currentNet].getConnectedNodes().size(); j++) {
                 int oldGain = 2*((*Nodes)[j].getCrossings()) - (*Nodes)[j].getConnectedNets().size();
 
@@ -415,9 +418,14 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
 
                 if ((*Nodes)[selectedNode].whichPartition() ^ (*Nodes)[j].whichPartition()) {
                     //They are different sides
+                    // a net will only be cut when it goes up from a 0 to 1. 
+                    if ((*Nodes)[j].getCrossings() == 0){inc_cutsize = true;}
                     (*Nodes)[j].incCrossings();
+
                 } else {
                     //they are same sides
+                    // a net can only be uncut when the number of crossing go down from a 1 to a 0. 
+                    if((*Nodes)[j].getCrossings() == 1){dec_cutsize = true; }
                     (*Nodes)[j].decCrossings();
                 }
                 int newGain = 2*((*Nodes)[j].getCrossings()) - (*Nodes)[j].getConnectedNets().size();
@@ -435,7 +443,11 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                     (*chosenBucket)[newGain] = nodeUpdater;
                 }
             }
+
+            if(inc_cutsize == true){cutsize++;}
+            if(dec_cutsize == true){cutsize--;}   
         }
+        cout<< "cutsize after the pass" << cutsize << endl; 
     }
 
 
