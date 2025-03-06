@@ -251,7 +251,7 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
         //Calculate the gain (See function calculateCrossings for more information)
         //gain = 2*crossings - totalNets
         int gain = 2*(*Nodes)[i].getCrossings() - (*Nodes)[i].getConnectedNets().size();
-        cout << "Gain of " << gain;
+        cout << "Gain of " << gain << " = (2 *" << (*Nodes)[i].getCrossings() << ") - " << (*Nodes)[i].getConnectedNets().size();
 
         //Create a new DLLnode, whose value is the index of the node
         // Allocate memory on the heap so it persists after the loop iteration
@@ -338,7 +338,7 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
             cout << "Largest key is in right bucket ";
         }
 
-        cout << " with a gain of: " << gainSelector << endl;
+        cout << "with a gain of: " << gainSelector << endl;
 
         // Loop to the end of the linked list
         linkedlist* dllNode = (*chosenBucket)[gainSelector];
@@ -366,7 +366,7 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
         point.cutSize = cutsize;
         point.ratio = getAreaRatio(*Nodes); 
         timeline.push_back(point);
-        cout <<"cutsize before pass" << cutsize << endl;
+        cout <<"cutsize before pass: " << cutsize << endl;
 
         bool inc_cutsize, dec_cutsize; // flags that indicate if the cutsize should be incremented or decremented. 
 
@@ -383,8 +383,13 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                 int oldGain = (2 * (*Nodes)[lookingFor].getCrossings()) - (*Nodes)[lookingFor].getConnectedNets().size();
                 map<int, linkedlist*>* nodeUpdaterBucket;
 
-                cout << "Starting search for node[" << lookingFor << "]: " << (*Nodes)[lookingFor].getID() << endl;
-                cout << "old gain is: " << oldGain << endl;
+                cout << "Starting search for node[" << lookingFor << "]: " << (*Nodes)[lookingFor].getID() << " with gain of " << oldGain << " = (2*" << (*Nodes)[lookingFor].getCrossings() << ") - " << (*Nodes)[lookingFor].getConnectedNets().size() << endl;
+                
+                //This is the same node that we've now locked, skip
+                if (lookingFor == selectedNode) {
+                    break;
+                }
+                
                 if ((*Nodes)[lookingFor].whichPartition() == 1) {
                     //The node we are looking for is in the right bucket
                     nodeUpdaterBucket = &leftBucket;
@@ -406,7 +411,7 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                 // Loop until the end of the node
                 // Or until we find the index we're looking for
                 while (nodeUpdater->getNodeID() != lookingFor) {
-                    cout <<"\t\tCurrently at [" << nodeUpdater->getNodeID() << "]: " << (*Nodes)[nodeUpdater->getNodeID()].getID() << endl;
+                    cout <<"\t\tCurrently at node[" << nodeUpdater->getNodeID() << "]: " << (*Nodes)[nodeUpdater->getNodeID()].getID() << endl;
                     if (nodeUpdater->getNext() == nullptr) {
                         //If this triggers, we are at the end of the list
                         cerr << "Error: nodeUpdater->getNext() is nullptr" << endl;
@@ -428,43 +433,52 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                 nodeUpdater->setNext(nullptr);
 
                 if (nodeUpdaterPrev == nullptr && nodeUpdaterNext == nullptr) {
-                    (*chosenBucket).erase(oldGain);
+                    (*nodeUpdaterBucket).erase(oldGain);
+                    cout << "\t\tRemoving key from bucket" << endl;
                 } else if (nodeUpdaterPrev == nullptr && nodeUpdaterNext != nullptr) {
                     // This is the first node, link this to the head in the key
-                    (*chosenBucket)[oldGain] = nodeUpdaterNext;
+                    (*nodeUpdaterBucket)[oldGain] = nodeUpdaterNext;
+                    cout << "\t\tGet the next node and move it to the head" << endl;
                 } else if (nodeUpdaterPrev != nullptr && nodeUpdaterNext == nullptr) {
                     // This is the last node, simply remove the previous connection
                     nodeUpdaterPrev->setNext(nullptr);
+                    cout << "\t\tThis is the last node, set prev to null" << endl;
                 } else {
                     // Standard case, simply stitch the DLL back together
                     nodeUpdaterPrev->setNext(nodeUpdaterNext);
                     nodeUpdaterNext->setPrev(nodeUpdaterPrev);
+                    cout << "\t\tFound in the middle" << endl;
                 }
 
-                if ((*Nodes)[selectedNode].whichPartition() ^ (*Nodes)[j].whichPartition()) {
+                if ((*Nodes)[selectedNode].whichPartition() ^ (*Nodes)[lookingFor].whichPartition()) {
                     //They are different sides
                     // a net will only be cut when it goes up from a 0 to 1. 
-                    if ((*Nodes)[j].getCrossings() == 0){inc_cutsize = true;}
-                    (*Nodes)[j].incCrossings();
+                    if ((*Nodes)[lookingFor].getCrossings() == 0){inc_cutsize = true;}
+                    (*Nodes)[lookingFor].incCrossings();
 
                 } else {
                     //they are same sides
                     // a net can only be uncut when the number of crossing go down from a 1 to a 0. 
-                    if((*Nodes)[j].getCrossings() == 1){dec_cutsize = true; }
-                    (*Nodes)[j].decCrossings();
+                    if((*Nodes)[lookingFor].getCrossings() == 1){dec_cutsize = true; }
+                    (*Nodes)[lookingFor].decCrossings();
                 }
-                int newGain = 2 * ((*Nodes)[j].getCrossings()) - (*Nodes)[j].getConnectedNets().size();
+                int newGain = 2 * ((*Nodes)[lookingFor].getCrossings()) - (*Nodes)[lookingFor].getConnectedNets().size();
+                cout << "\t\tNew Gain: "<< newGain << endl;
 
-                // Place the selected node back into the correct bucket
-                if ((*chosenBucket).find(newGain) != (*chosenBucket).end()) {
+                // Place the selected node back into the same bucket with the new gain
+                if ((*nodeUpdaterBucket).find(newGain) != (*nodeUpdaterBucket).end()) {
                     // If the key exists, add it to the beginning of the linked list
-                    nodeUpdaterNext = (*chosenBucket)[newGain]; // Here, I'm reusing nodeUpdaterNext
-                    (*chosenBucket)[newGain] = nodeUpdater;
+                    nodeUpdaterNext = (*nodeUpdaterBucket)[newGain]; // Here, I'm reusing nodeUpdaterNext
+                    (*nodeUpdaterBucket)[newGain] = nodeUpdater;
                     nodeUpdater->setNext(nodeUpdaterNext);
+                    nodeUpdaterNext->setPrev(nodeUpdater);
+                    cout << "\t\tKey exists, placed back in bucket with gain: " << newGain << endl;
 
                 } else {
                     // If the key does not exist, add it to the map
-                    (*chosenBucket)[newGain] = nodeUpdater;
+                    (*nodeUpdaterBucket)[newGain] = nodeUpdater;
+                    cout << "\t\tKey does not exist, creating: " << newGain << endl;
+                    cout << "\t\t" << (*nodeUpdaterBucket)[newGain]->getNodeID() << endl;
                 }
             }
             if(inc_cutsize){cutsize++;}
