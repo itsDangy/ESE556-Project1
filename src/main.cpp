@@ -408,8 +408,8 @@ int main() {
                 linkedlist* nodeUpdaterNext = nodeUpdater->getNext();
 
                 //Set nodeupdater to default nullptrs for both
-                nodeUpdater.setPrev(nullptr);
-                nodeUpdater.setNext(nullptr);
+                (*nodeUpdater).setPrev(nullptr);
+                (*nodeUpdater).setNext(nullptr);
 
                 if (nodeUpdaterPrev == nullptr && nodeUpdaterNext == nullptr) {
                     (*chosenBucket).erase(oldGain);
@@ -418,11 +418,11 @@ int main() {
                     (*chosenBucket)[oldGain] = nodeUpdaterNext;
                 } else if (nodeUpdaterPrev != nullptr && nodeUpdaterNext == nullptr) {
                     //This is the last node, simply remove the previous connection
-                    nodeUpdaterPrev.setNext(nullptr);
+                    (*nodeUpdaterPrev).setNext(nullptr);
                 } else {
                     //Standard case, simply stitch the DLL back together
-                    nodeUpdaterPrev->setNext(nodeUpdaterNext);
-                    nodeUpdaterNext->setPrev(nodeUpdaterPrev);
+                    (*nodeUpdaterPrev).setNext(nodeUpdaterNext);
+                    (*nodeUpdaterNext).setPrev(nodeUpdaterPrev);
                 }
 
 
@@ -442,7 +442,7 @@ int main() {
                     //If the key exists, add it to the beginning of the linked list
                     nodeUpdaterNext = (*chosenBucket)[newGain]; //Here, I'm reusing nodeUpdaterNext
                     (*chosenBucket)[newGain] = nodeUpdater;
-                    nodeUpdater.setNext(nodeUpdaterNext);
+                    (*nodeUpdater).setNext(nodeUpdaterNext);
 
                 } else {
                     //If the key does not exist, add it to the map
