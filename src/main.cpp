@@ -357,22 +357,32 @@ int main() {
         if (dllNode == nullptr) {
             exit(EXIT_FAILURE);
         }
+
+        
         //Loop to the end of the node
         while (dllNode->getNext() != nullptr) {
             dllNode = dllNode->getNext();
         }
         //At this point we are at the last node
         selectedNode = (*dllNode).getNodeID(); 
-        free(dllNode);
         
+        cout << "test" << endl;
         linkedlist* prevNode = dllNode->getPrev();
-        prevNode->setNext(nullptr);
+        cout << "HELLO PLEASE" << endl;
+        if (prevNode != nullptr) {
+            prevNode->setNext(nullptr);
+        }
+        cout << "FDSFSD" << endl;
+        free(dllNode);
+        cout << "test2" << endl;
 
         struct timePoint point;
         point.lockedNode = selectedNode;
         point.cutSize = cutsize;
         //Also do area ratio, but i don't feel like doing that right now
         timeline.push_back(point);
+
+        
 
         Nodes[selectedNode].movePartition();
         //i refers to the index of the current net
