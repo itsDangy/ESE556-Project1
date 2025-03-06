@@ -237,15 +237,18 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
             //If the partition is the left
             currentBucket = leftBucket;
             (*lSize)++;
+            cout << "Left  ";
         } else {
             //If the partition is on the right
             currentBucket = rightBucket;
             (*rSize)++;
+            cout << "Right ";
         }
 
         //Calculate the gain (See function calculateCrossings for more information)
         //gain = 2*crossings - totalNets
         int gain = 2*(*Nodes)[i].getCrossings() - (*Nodes)[i].getConnectedNets().size();
+        cout << "Gain of " << gain;
 
         //Create a new DLLnode, whose value is the index of the node
         // Allocate memory on the heap so it persists after the loop iteration
@@ -258,8 +261,10 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
 
             //Insert this DLL node's address to the hashmap with key of crossings
             (*currentBucket)[gain] = insertDLLNode;
+            cout << " No key" << endl;
         } else {
             //If the key is present
+            cout << " w/ key" << endl;
 
             //Get the node at that DLL and follow it until the very end.
             linkedlist* dllNode = (*currentBucket)[gain];
@@ -277,22 +282,22 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
 }
 
 void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
-    //For all terminal nodes, ensure that they will no longer move.
+    // For all terminal nodes, ensure that they will no longer move.
 
-    //Determine the gains, store the current gains in the Nodes structure.
+    // Determine the gains, store the current gains in the Nodes structure.
     int cutsize = calculateCrossings(Nodes, Nets);
 
-    //Creates the timeline necessary for FM to climb hills and work
-    //The index will be the iteration number, while the timePoint struct holds the relevant information for that paticular iteration
+    // Creates the timeline necessary for FM to climb hills and work
+    // The index will be the iteration number, while the timePoint struct holds the relevant information for that particular iteration
     vector<timePoint> timeline;
-    int lowestCutsize = INT_MAX;    //This will be used and updated as we find the lowest cutsize
+    int lowestCutsize = INT_MAX; // This will be used and updated as we find the lowest cutsize
 
-    //Create 2 buckets -- left and right
-    //This bucket is a unordered map (Hashmap), whos key is an int going form PMAX to -PMAX.
-    //The value will be the pointer to a doubly linked list (DLL). The Data for this DLL will be an int, which will
-    //reference the index in vector Nodes.
-    map<int, linkedlist*> leftBucket; //Left bucket is considered 0
-    map<int, linkedlist*> rightBucket;    //Right bucket is considered 1
+    // Create 2 buckets -- left and right
+    // This bucket is an unordered map (Hashmap), whose key is an int going from PMAX to -PMAX.
+    // The value will be the pointer to a doubly linked list (DLL). The Data for this DLL will be an int, which will
+    // reference the index in vector Nodes.
+    map<int, linkedlist*> leftBucket; // Left bucket is considered 0
+    map<int, linkedlist*> rightBucket; // Right bucket is considered 1
     map<int, linkedlist*>* chosenBucket;
 
     int lBucketSize = 0;
@@ -317,40 +322,39 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     int gainSelector = 0;    //0 if left, 1 if right
 
     while (leftBucket.size() != 0 || rightBucket.size() != 0) {
-
-        //Choose the side with the largest key
+// Choose the side with the largest key
         if (leftBucket.rbegin()->first - rightBucket.rbegin()->first >= 0) {
-            //Left bucket is bigger
+            // Left bucket is bigger
             gainSelector = leftBucket.rbegin()->first;
             chosenBucket = &leftBucket;
         } else {
-            //Right bucket is bigger
+            // Right bucket is bigger
             gainSelector = rightBucket.rbegin()->first;
             chosenBucket = &rightBucket;
         }
 
         cout << "gain is: " << gainSelector << endl;
 
-        //Loop to the end of the linked list
+        // Loop to the end of the linked list
         linkedlist* dllNode = (*chosenBucket)[gainSelector];
         int selectedNode = -1;
         if (dllNode == nullptr) {
+            cerr << "Error: dllNode is nullptr" << endl;
             exit(EXIT_FAILURE);
         }
 
-        
-        //Loop to the end of the node
+        // Loop to the end of the node
         while (dllNode->getNext() != nullptr) {
             dllNode = dllNode->getNext();
         }
-        //At this point we are at the last node
+        // At this point we are at the last node
         selectedNode = (*dllNode).getNodeID(); 
         
         linkedlist* prevNode = dllNode->getPrev();
         if (prevNode != nullptr) {
             prevNode->setNext(nullptr);
         }
-        free(dllNode);
+        delete dllNode; // Use delete instead of free for C++ objects
 
         struct timePoint point;
         point.lockedNode = selectedNode;
@@ -362,59 +366,61 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
         bool inc_cutsize, dec_cutsize; // flags that indicate if the cutsize should be incremented or decremented. 
 
         (*Nodes)[selectedNode].movePartition();
-        //i refers to the index of the current net
+        // i refers to the index of the current net
         for (int i = 0; i < (*Nodes)[selectedNode].getConnectedNets().size(); i++) {
             int currentNet = (*Nodes)[selectedNode].getConnectedNets()[i];
             //j refers to the index of the current node
-            inc_cutsize = false; 
-            dec_cutsize = false; 
             for (int j = 0; j < (*Nets)[currentNet].getConnectedNodes().size(); j++) {
-                int oldGain = 2*((*Nodes)[j].getCrossings()) - (*Nodes)[j].getConnectedNets().size();
+                int oldGain = (2 * ((*Nodes)[j].getCrossings())) - (*Nodes)[j].getConnectedNets().size();
 
-                //Find the jnode and remove it from the bucket structure
-                //Loop to the end of the linked list
+                // Find the jnode and remove it from the bucket structure
+                // Loop to the end of the linked list
                 linkedlist* nodeUpdater = (*chosenBucket)[oldGain];
                 if (nodeUpdater == nullptr) {
+                    cerr << "Error: nodeUpdater is nullptr" << endl;
                     exit(EXIT_FAILURE);
                 }
 
-                //Loop until the end of the node
-                //Or until we find the index we're looking for
+                // Loop until the end of the node
+                // Or until we find the index we're looking for
                 int lookingFor = (*Nets)[currentNet].getConnectedNodes()[j];
                 while (nodeUpdater->getNodeID() != lookingFor) {
-                    if (nodeUpdater->getNext() != nullptr) {
+                    cout<<"Looking for node " <<lookingFor<<endl;
+                    cout << "old gain is: " << oldGain << endl;
+                    cout << nodeUpdater->getNodeID() << endl;
+                    if (nodeUpdater->getNext() == nullptr) {
+                        //If this triggers, we are at the end of the list
+                        cerr << "Error: nodeUpdater->getNext() is nullptr" << endl;
                         exit(EXIT_FAILURE);
                     }
                     nodeUpdater = nodeUpdater->getNext();
                 }
-                //nodeUpdater now has the node we're trying to move
-                //Update the DLL to remove nodeUpdater from the area
+                // nodeUpdater now has the node we're trying to move
+                // Update the DLL to remove nodeUpdater from the area
 
-                //If nodeUpdater.getPrev() is nullptr, it is the first.
-                //If nodeUpdater.getNext() is nullptr, it is the last.
-                //If it is both, remove the key entierly from the map
+                // If nodeUpdater.getPrev() is nullptr, it is the first.
+                // If nodeUpdater.getNext() is nullptr, it is the last.
+                // If it is both, remove the key entirely from the map
                 linkedlist* nodeUpdaterPrev = nodeUpdater->getPrev();
                 linkedlist* nodeUpdaterNext = nodeUpdater->getNext();
 
-                //Set nodeupdater to default nullptrs for both
-                (*nodeUpdater).setPrev(nullptr);
-                (*nodeUpdater).setNext(nullptr);
+                // Set nodeupdater to default nullptrs for both
+                nodeUpdater->setPrev(nullptr);
+                nodeUpdater->setNext(nullptr);
 
                 if (nodeUpdaterPrev == nullptr && nodeUpdaterNext == nullptr) {
                     (*chosenBucket).erase(oldGain);
                 } else if (nodeUpdaterPrev == nullptr && nodeUpdaterNext != nullptr) {
-                    //This is the first node, link this to the head in the key
+                    // This is the first node, link this to the head in the key
                     (*chosenBucket)[oldGain] = nodeUpdaterNext;
                 } else if (nodeUpdaterPrev != nullptr && nodeUpdaterNext == nullptr) {
-                    //This is the last node, simply remove the previous connection
-                    (*nodeUpdaterPrev).setNext(nullptr);
+                    // This is the last node, simply remove the previous connection
+                    nodeUpdaterPrev->setNext(nullptr);
                 } else {
-                    //Standard case, simply stitch the DLL back together
-                    (*nodeUpdaterPrev).setNext(nodeUpdaterNext);
-                    (*nodeUpdaterNext).setPrev(nodeUpdaterPrev);
+                    // Standard case, simply stitch the DLL back together
+                    nodeUpdaterPrev->setNext(nodeUpdaterNext);
+                    nodeUpdaterNext->setPrev(nodeUpdaterPrev);
                 }
-
-
 
                 if ((*Nodes)[selectedNode].whichPartition() ^ (*Nodes)[j].whichPartition()) {
                     //They are different sides
@@ -428,42 +434,37 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                     if((*Nodes)[j].getCrossings() == 1){dec_cutsize = true; }
                     (*Nodes)[j].decCrossings();
                 }
-                int newGain = 2*((*Nodes)[j].getCrossings()) - (*Nodes)[j].getConnectedNets().size();
+                int newGain = 2 * ((*Nodes)[j].getCrossings()) - (*Nodes)[j].getConnectedNets().size();
 
-
-                //Place the selected node back into the correct bucket
+// Place the selected node back into the correct bucket
                 if ((*chosenBucket).find(newGain) != (*chosenBucket).end()) {
-                    //If the key exists, add it to the beginning of the linked list
-                    nodeUpdaterNext = (*chosenBucket)[newGain]; //Here, I'm reusing nodeUpdaterNext
+                    // If the key exists, add it to the beginning of the linked list
+                    nodeUpdaterNext = (*chosenBucket)[newGain]; // Here, I'm reusing nodeUpdaterNext
                     (*chosenBucket)[newGain] = nodeUpdater;
-                    (*nodeUpdater).setNext(nodeUpdaterNext);
+                    nodeUpdater->setNext(nodeUpdaterNext);
 
                 } else {
-                    //If the key does not exist, add it to the map
+                    // If the key does not exist, add it to the map
                     (*chosenBucket)[newGain] = nodeUpdater;
                 }
             }
-
-            if(inc_cutsize == true){cutsize++;}
-            if(dec_cutsize == true){cutsize--;}   
         }
         cout<< "cutsize after the pass" << cutsize << endl; 
     }
 
-
-    //Here, all cells are now fixed and emptied out of the buckets.
-    //Roll back the changes from the timeline one by one until we've reached the lowest cutsize during this iteration
-    //Lowest cutsize is found in variable lowestCutsize, so just keep rolling back until we've gotten to a point in history
-    //Where that is the case
-    for (int i = timeline.size(); i > 0; i--) {
+// Here, all cells are now fixed and emptied out of the buckets.
+    // Roll back the changes from the timeline one by one until we've reached the lowest cutsize during this iteration
+    // Lowest cutsize is found in variable lowestCutsize, so just keep rolling back until we've gotten to a point in history
+    // Where that is the case
+    for (int i = timeline.size() - 1; i >= 0; i--) {
         if (timeline[i].cutSize == lowestCutsize) {
             break;
         }
-        //Otherwise flip the node and continue
+        // Otherwise flip the node and continue
         (*Nodes)[timeline[i].lockedNode].movePartition();
     }
 
-    //This is the most efficient cutsize of the current FM pass
+    // This is the most efficient cutsize of the current FM pass
 }
 
 int main() {
