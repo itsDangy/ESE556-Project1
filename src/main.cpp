@@ -127,6 +127,47 @@ vector<Net> parseNets(string filename, vector<Node>* nodes) {
     return Nets;
 }
 
+void writeOutput(string filename, int cutsize, vector<Node> Nodes) {
+    ofstream OutputFile(filename);
+    if(!OutputFile.is_open()) {
+        cerr << filename << " not found" << endl;
+        exit(EXIT_FAILURE);
+    }
+
+    vector<string> leftNodes;
+    vector<string> rightNodes;
+    int leftArea = 0;
+    int rightArea = 0;
+
+    OutputFile << "Cutsize: " << cutsize << endl;
+    for (int i = 0; i < numNodes; i++) {
+        if (Nodes[i].whichPartition() == 0) {
+            leftNodes.push_back(Nodes[i].getID());
+            leftArea += Nodes[i].getArea();
+        } else {
+            rightNodes.push_back(Nodes[i].getID());
+            rightArea += Nodes[i].getArea();
+        }
+    }
+    float ratio = (float)leftArea/rightArea;
+    OutputFile << "Partition Ratio: " << ratio << endl;
+
+    int totalArea = leftArea + rightArea;
+    float leftPercent = (float)leftArea/totalArea * 100;
+    float rightPercent = (float)rightArea/totalArea * 100;
+
+    OutputFile << "Partition 1: " << leftNodes.size() << "\tArea: " << leftArea << " - " << leftPercent << "%" << endl;
+    for (auto i : leftNodes) {
+        OutputFile << i << endl;
+    }
+
+    OutputFile << "Partition 2: " << rightNodes.size() << "\tArea: " << rightArea << " - " << rightPercent << "%" << endl;
+    for (auto i : rightNodes) {
+        OutputFile << i << endl;
+    }
+
+    OutputFile.close();
+}
 
 void calculateCrossings(vector<Node>* Nodes, vector<Net>* Nets) {
     int cutsize = 0;
@@ -261,15 +302,16 @@ void storeInBuckets(unordered_map<int, linkedlist*>* leftBucket, unordered_map<i
 
 int main() {
     string benchmark = "superblue18";
-    string filepath = "../Benchmarks/" + benchmark + "/" + benchmark;
+    string ifilepath = "../Benchmarks/" + benchmark + "/" + benchmark;
+    string ofilepath = "../Output/" + benchmark + "_Output.txt";
 
     //Parse the nodes
     vector<Node> Nodes;
-    Nodes = parseNodes(filepath+".nodes");
+    Nodes = parseNodes(ifilepath+".nodes");
     cout << Nodes.size() << endl;
 
     vector<Net> Nets;
-    Nets = parseNets(filepath+".nets", &Nodes);
+    Nets = parseNets(ifilepath+".nets", &Nodes);
     cout << Nets.size() << endl;
 
     cout << Nodes[45].getID() << endl;
@@ -284,6 +326,14 @@ int main() {
     // }
 
     //At this time, we should have everything parsed into the correct data structures
+
+    //Create 2 buckets -- left and right
+    //This bucket is a unordered map (Hashmap), whos key is an int going form PMAX to -PMAX.
+    //The value will be the pointer to a doubly linked list (DLL). The Data for this DLL will be an int, which will
+    //reference the index in vector Nodes.
+
+    unordered_map<int, linkedlist*> leftBucket;
+    unordered_map<int, linkedlist*> rightBucket;
 
     //Creates the timeline necessary for FM to climb hills and work
     //The index will be the iteration number, while the timePoint struct holds the relevant information for that paticular iteration
@@ -327,6 +377,6 @@ int main() {
 
 
 
-
+    writeOutput(ofilepath,currentCutsize,Nodes);
     return 0;
 }
