@@ -478,9 +478,17 @@ int main() {
 
     //Here, all cells are now fixed and emptied out of the buckets.
     //Roll back the changes from the timeline one by one until we've reached the lowest cutsize during this iteration
+    //Lowest cutsize is found in variable lowestCutsize, so just keep rolling back until we've gotten to a point in history
+    //Where that is the case
     for (int i = timeline.size(); i > 0; i--) {
+        if (timeline[i].cutSize == lowestCutsize) {
+            break;
+        }
+        //Otherwise flip the node and continue
         Nodes[timeline[i].lockedNode].movePartition();
     }
+
+    //This is the most efficient cutsize of the current FM pass
 
 
 
