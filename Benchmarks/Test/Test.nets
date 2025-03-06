@@ -1,25 +1,212 @@
 UCLA nodes 1.0
-NumNets : 3
-NumPins : 2
-NetDegree	:		6	n0
-	o0
+NumNets : 20
+NumPins : 6
+NetDegree	:		13	n0
 	o3
+	p0
+	o7
+	o2
+	o4
 	p1
+	o8
+	o6
+	p5
+	o1
+	p4
+	p3
+	o5
+NetDegree	:		7	n1
+	p3
+	o3
+	o1
+	p1
+	o2
+	o4
+	p4
+NetDegree	:		13	n2
+	o0
 	o5
 	p0
-	o2
-NetDegree	:		8	n1
+	p1
+	o6
 	o3
+	o8
+	o4
+	o1
+	p2
+	p4
+	o2
+	p3
+NetDegree	:		11	n3
+	p2
+	o3
+	o5
+	o4
+	p0
+	o0
+	p3
+	o8
+	o6
+	p5
+	o7
+NetDegree	:		2	n4
+	p0
+	o2
+NetDegree	:		5	n5
+	p3
+	o1
+	o0
+	p2
+	o6
+NetDegree	:		7	n6
+	o2
+	o0
+	o4
+	p2
+	o7
+	o5
+	p1
+NetDegree	:		8	n7
+	o4
+	o1
+	p1
+	p3
+	p2
+	o7
+	o2
+	o3
+NetDegree	:		5	n8
+	o5
+	p5
+	o4
+	o8
+	p2
+NetDegree	:		5	n9
+	o2
+	o1
+	p2
+	p1
+	o3
+NetDegree	:		10	n10
+	o0
+	p2
+	p3
+	o5
+	p1
+	p5
+	p0
+	o2
+	o8
+	o3
+NetDegree	:		12	n11
+	o6
+	o2
+	o5
+	o1
+	p2
+	p5
+	p1
+	o3
+	p0
+	o4
+	o8
+	o0
+NetDegree	:		10	n12
+	o7
+	o2
+	o8
+	p4
+	o3
+	o6
+	o0
+	o4
+	p5
+	p2
+NetDegree	:		7	n13
+	o6
+	o5
+	p5
+	o4
+	p2
+	p4
+	o3
+NetDegree	:		15	n14
+	p4
+	p0
+	p5
+	o4
+	o2
+	o0
+	p1
+	o3
+	p3
+	o8
+	p2
+	o7
+	o1
+	o6
+	o5
+NetDegree	:		10	n15
+	o4
+	p3
+	p0
+	o6
+	p2
+	o3
+	o2
+	o1
+	p5
+	o7
+NetDegree	:		15	n16
+	o5
+	o2
+	o3
+	o4
+	p2
+	o6
+	p0
+	o0
+	p4
+	o7
 	p1
 	o1
-	o2
+	p3
+	p5
+	o8
+NetDegree	:		9	n17
+	o5
 	p0
-	o5
+	o1
+	p2
+	o8
+	p1
 	o0
-	o4
-NetDegree	:		5	n2
+	p4
+	p3
+NetDegree	:		10	n18
 	o2
 	o5
+	o8
+	o6
+	o1
+	p4
+	o7
+	o4
+	o0
+	p2
+NetDegree	:		15	n19
+	p5
+	p3
 	p0
 	o3
+	o5
+	o1
 	o4
+	o2
+	o8
+	o7
+	p2
+	p1
+	p4
+	o0
+	o6
