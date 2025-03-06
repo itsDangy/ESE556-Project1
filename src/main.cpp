@@ -299,6 +299,7 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     map<int, linkedlist*> leftBucket; // Left bucket is considered 0
     map<int, linkedlist*> rightBucket; // Right bucket is considered 1
     map<int, linkedlist*>* chosenBucket;
+    map<int, linkedlist*>* oppositeBucket; // Needed for the node in case the node that is associated with a net is not in the chosen bucket. 
 
     int lBucketSize = 0;
     int rBucketSize = 0;
@@ -327,10 +328,12 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
             // Left bucket is bigger
             gainSelector = leftBucket.rbegin()->first;
             chosenBucket = &leftBucket;
+            oppositeBucket = &rightBucket; 
         } else {
             // Right bucket is bigger
             gainSelector = rightBucket.rbegin()->first;
             chosenBucket = &rightBucket;
+            oppositeBucket = &leftBucket; 
         }
 
         cout << "gain is: " << gainSelector << endl;
@@ -363,7 +366,8 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
         timeline.push_back(point);
         cout <<"cutsize before pass" << cutsize << endl;
 
-        bool inc_cutsize, dec_cutsize; // flags that indicate if the cutsize should be incremented or decremented. 
+        bool inc_cutsize= false, dec_cutsize= false; // flags that indicate if the cutsize should be incremented or decremented. 
+        bool notInChosen = false; 
 
         (*Nodes)[selectedNode].movePartition();
         // i refers to the index of the current net
@@ -372,14 +376,18 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
             //j refers to the index of the current node
             for (int j = 0; j < (*Nets)[currentNet].getConnectedNodes().size(); j++) {
                 int oldGain = (2 * ((*Nodes)[j].getCrossings())) - (*Nodes)[j].getConnectedNets().size();
+                //cout <<"old gain is"
 
                 // Find the jnode and remove it from the bucket structure
                 // Loop to the end of the linked list
-                linkedlist* nodeUpdater = (*chosenBucket)[oldGain];
-                if (nodeUpdater == nullptr) {
+                linkedlist* nodeUpdater = (*chosenBucket)[oldGain]; // getConnectedNets will return all the nodes that are connected to a given net. But this focuses on a single bucket. What if the nodes that you're looking for
+                if (nodeUpdater == nullptr) {                       // are in the other bucket? set a flag saying its not in the chosen bucket and change the chosen bucket to the not chosen bucket and then look for it there? 
                     cerr << "Error: nodeUpdater is nullptr" << endl;
                     exit(EXIT_FAILURE);
+                    
                 }
+                
+
 
                 // Loop until the end of the node
                 // Or until we find the index we're looking for
@@ -388,10 +396,21 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                     cout<<"Looking for node " <<lookingFor<<endl;
                     cout << "old gain is: " << oldGain << endl;
                     cout << nodeUpdater->getNodeID() << endl;
-                    if (nodeUpdater->getNext() == nullptr) {
+                    if (nodeUpdater->getNext() == nullptr) {// This means that the node is not in the chosen bucket. Meaning it should be in the opposite bucket. 
                         //If this triggers, we are at the end of the list
-                        cerr << "Error: nodeUpdater->getNext() is nullptr" << endl;
-                        exit(EXIT_FAILURE);
+                        notInChosen = true; 
+                        cerr << "Error: nodeUpdater->getNext() is nullptr" << endl; // know what bucket you are currently in and then switch the buckets to find the node. 
+                        break; // if not found then break out of this loop. 
+                        //exit(EXIT_FAILURE);
+                    }
+                    nodeUpdater = nodeUpdater->getNext();
+                }
+                if(notInChosen){
+                    linkedlist* nodeUpdater = (*oppositeBucket)[oldGain]; // because the node was not found in the chosen bucket look for it in the opposite bucket. 
+                    while(nodeUpdater -> getNodeID()!=lookingFor){
+                        if(nodeUpdater->getNext() == nullptr){
+                            cerr << "Error : BIG PROBLEM. NODE NOT IN THE OPPOSITE BUCKET EITHER"<< endl; 
+                        }
                     }
                     nodeUpdater = nodeUpdater->getNext();
                 }
