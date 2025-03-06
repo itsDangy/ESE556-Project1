@@ -20,7 +20,7 @@ int offset;
 struct timePoint { 
     int lockedNode; 
     int cutSize; 
-    float area;
+    float ratio;
 };
 
 vector<Node> parseNodes(string filename) {
@@ -134,7 +134,7 @@ void writeOutput(string filename, int cutsize, vector<Node> Nodes) {
         cerr << filename << " not found" << endl;
         exit(EXIT_FAILURE);
     }
-
+    // making a copy and not deleting this just yet. 
     vector<string> leftNodes;
     vector<string> rightNodes;
     int leftArea = 0;
@@ -168,6 +168,21 @@ void writeOutput(string filename, int cutsize, vector<Node> Nodes) {
     }
 
     OutputFile.close();
+}
+
+float getAreaRatio(vector<Node> Nodes){
+    int leftArea, rightArea; 
+    for (int i = 0; i < numNodes; i++) {
+        if (Nodes[i].whichPartition() == 0) {
+            //leftNodes.push_back(Nodes[i].getID());
+            leftArea += Nodes[i].getArea();
+        } else {
+            //rightNodes.push_back(Nodes[i].getID());
+            rightArea += Nodes[i].getArea();
+        }
+    }
+    float ratio = (float)leftArea/rightArea;
+    return ratio; 
 }
 
 int calculateCrossings(vector<Node>* Nodes, vector<Net>* Nets) {
@@ -379,6 +394,8 @@ int main() {
         struct timePoint point;
         point.lockedNode = selectedNode;
         point.cutSize = cutsize;
+        point.ratio = getAreaRatio(Nodes); 
+
         //Also do area ratio, but i don't feel like doing that right now
         timeline.push_back(point);
 
