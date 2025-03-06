@@ -339,6 +339,36 @@ void removeFromBucket(map<int, linkedlist*>* chosenBucket, int gainSelector, int
     }
 }
 
+void printBuckets(map<int, linkedlist*> leftBucket, map<int, linkedlist*> rightBucket, int selectedNode, vector<Node>* Nodes) {
+    if (selectedNode != -1) {
+        cout << "move and lock node " << (*Nodes)[selectedNode].getID() << endl;
+    }
+    else 
+        cout << "No node selected" << endl;
+    
+    cout << "Left Bucket" << endl;
+    for (auto i : leftBucket) {
+        cout << "\tGain: " << i.first << "\t";
+        linkedlist* dllNode = i.second;
+        while (dllNode != nullptr) {
+            cout << (*Nodes)[dllNode->getNodeID()].getID() << "->";
+            dllNode = dllNode->getNext();
+        }
+        cout << endl;
+    }
+
+    cout << "Right Bucket" << endl;
+    for (auto i : rightBucket) {
+        cout << "\tGain: " << i.first << "\t";
+        linkedlist* dllNode = i.second;
+        while (dllNode != nullptr) {
+            cout << (*Nodes)[dllNode->getNodeID()].getID() << "->";
+            dllNode = dllNode->getNext();
+        }
+        cout << endl;
+    }
+}
+
 void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     // For all terminal nodes, ensure that they will no longer move.
 
@@ -415,6 +445,8 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
         //     prevNode->setNext(nullptr);
         // }
         // delete dllNode; // Use delete instead of free for C++ objects
+
+        printBuckets(leftBucket, rightBucket, selectedNode, Nodes);
 
         struct timePoint point;
         point.lockedNode = selectedNode;
@@ -552,6 +584,7 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
             if(dec_cutsize){cutsize--;}
         }
         cout<< "cutsize after the pass: " << cutsize << endl; 
+        printBuckets(leftBucket, rightBucket, selectedNode, Nodes);
     }
 
     cout << "Buckets are empty" << endl;
@@ -568,6 +601,7 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     }
 
     // This is the most efficient cutsize of the current FM pass
+    
 }
 
 int main(int argc, char *argv[]) {
