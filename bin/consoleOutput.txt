@@ -1,0 +1,27 @@
+10
+15
+
+o0 placed in Right Gain of -8 No key
+o1 placed in Right Gain of -8 w/ key
+o2 placed in Right Gain of -7 No key
+o3 placed in Right Gain of -4 No key
+o4 placed in Right Gain of -6 No key
+o5 placed in Left  Gain of -5 No key
+p0 placed in Left  Gain of -5 w/ key
+p1 placed in Left  Gain of -2 No key
+p2 placed in Left  Gain of -11 No key
+p3 placed in Right Gain of -8 w/ key
+Left Size: 4 R Size: 6
+gain is: -2
+currentNet: 0
+Starting search for node[9]: p3
+old gain is: -8
+		Searching right bucket
+		Currently at [0]: o0
+		Currently at [1]: o1
+Starting search for node[2]: o2
+old gain is: -7
+		Searching right bucket
+Starting search for node[0]: o0
+old gain is: -10
+		Searching right bucket

@@ -233,23 +233,25 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
     map<int, linkedlist*> *currentBucket; //Used to effectively swap between the two buckets
     //Seperate the nodes out to the buckets, dependant on parition and gain.
     for (int i = 0; i < numNodes; i++) {
+
+        cout << (*Nodes)[i].getID() << " placed in ";
         
         if ((*Nodes)[i].whichPartition() == 1) {
             //If the partition is the left
             currentBucket = leftBucket;
             (*lSize)++;
-            // cout << "Left  ";
+            cout << "Left  ";
         } else {
             //If the partition is on the right
             currentBucket = rightBucket;
             (*rSize)++;
-            // cout << "Right ";
+            cout << "Right ";
         }
 
         //Calculate the gain (See function calculateCrossings for more information)
         //gain = 2*crossings - totalNets
         int gain = 2*(*Nodes)[i].getCrossings() - (*Nodes)[i].getConnectedNets().size();
-        // cout << "Gain of " << gain;
+        cout << "Gain of " << gain;
 
         //Create a new DLLnode, whose value is the index of the node
         // Allocate memory on the heap so it persists after the loop iteration
@@ -262,10 +264,10 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
 
             //Insert this DLL node's address to the hashmap with key of crossings
             (*currentBucket)[gain] = insertDLLNode;
-            // cout << " No key" << endl;
+            cout << " No key" << endl;
         } else {
             //If the key is present
-            // cout << " w/ key" << endl;
+            cout << " w/ key" << endl;
 
             //Get the node at that DLL and follow it until the very end.
             linkedlist* dllNode = (*currentBucket)[gain];
@@ -377,12 +379,16 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                 int oldGain = (2 * (*Nodes)[lookingFor].getCrossings()) - (*Nodes)[lookingFor].getConnectedNets().size();
                 map<int, linkedlist*>* nodeUpdaterBucket;
 
+                cout << "Starting search for node[" << lookingFor << "]: " << (*Nodes)[lookingFor].getID() << endl;
+                cout << "old gain is: " << oldGain << endl;
                 if ((*Nodes)[lookingFor].whichPartition() == 1) {
                     //The node we are looking for is in the right bucket
                     nodeUpdaterBucket = &leftBucket;
+                    cout << "\t\tSearching left bucket" << endl;
                 } else {
                     //The node are looking for is in the left bucket
                     nodeUpdaterBucket = &rightBucket;
+                    cout << "\t\tSearching right bucket" << endl;
                 }
 
                 // Find the jnode and remove it from the bucket structure
@@ -396,8 +402,7 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                 // Loop until the end of the node
                 // Or until we find the index we're looking for
                 while (nodeUpdater->getNodeID() != lookingFor) {
-                    cout<<" Looking for node " << lookingFor << "Currently at: " << nodeUpdater->getNodeID() << endl;
-                    cout << "old gain is: " << oldGain << endl;
+                    cout <<"\t\tCurrently at [" << nodeUpdater->getNodeID() << "]: " << (*Nodes)[nodeUpdater->getNodeID()].getID() << endl;
                     if (nodeUpdater->getNext() == nullptr) {
                         //If this triggers, we are at the end of the list
                         cerr << "Error: nodeUpdater->getNext() is nullptr" << endl;
