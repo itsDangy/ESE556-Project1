@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <unordered_map>
+#include <map>
 
 #include "Node.h"
 #include "Net.h"
@@ -254,17 +255,22 @@ void calculateCrossings(vector<Node>* Nodes, vector<Net>* Nets) {
     // return cutsize;
 }
 
-void storeInBuckets(unordered_map<int, linkedlist*>* leftBucket, unordered_map<int, linkedlist*>* rightBucket, vector<Node>* Nodes) {
-    unordered_map<int, linkedlist*> *currentBucket; //Used to effectively swap between the two buckets
+void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* rightBucket, vector<Node>* Nodes, int* lSize, int* rSize) {
+    *lSize = 0;
+    *rSize = 0;
+    
+    map<int, linkedlist*> *currentBucket; //Used to effectively swap between the two buckets
     //Seperate the nodes out to the buckets, dependant on parition and gain.
     for (int i = 0; i < numNodes; i++) {
         
         if ((*Nodes)[i].whichPartition() == 1) {
             //If the partition is the left
             currentBucket = leftBucket;
+            (*lSize)++;
         } else {
             //If the partition is on the right
             currentBucket = rightBucket;
+            (*rSize)++;
         }
 
         //Calculate the gain (See function calculateCrossings for more information)
@@ -327,14 +333,6 @@ int main() {
 
     //At this time, we should have everything parsed into the correct data structures
 
-    //Create 2 buckets -- left and right
-    //This bucket is a unordered map (Hashmap), whos key is an int going form PMAX to -PMAX.
-    //The value will be the pointer to a doubly linked list (DLL). The Data for this DLL will be an int, which will
-    //reference the index in vector Nodes.
-
-    unordered_map<int, linkedlist*> leftBucket;
-    unordered_map<int, linkedlist*> rightBucket;
-
     //Creates the timeline necessary for FM to climb hills and work
     //The index will be the iteration number, while the timePoint struct holds the relevant information for that paticular iteration
     vector<timePoint> timeline;
@@ -356,27 +354,62 @@ int main() {
     //This bucket is a unordered map (Hashmap), whos key is an int going form PMAX to -PMAX.
     //The value will be the pointer to a doubly linked list (DLL). The Data for this DLL will be an int, which will
     //reference the index in vector Nodes.
-    unordered_map<int, linkedlist*> leftBucket; //Left bucket is considered 0
-    unordered_map<int, linkedlist*> rightBucket;    //Right bucket is considered 1
+    map<int, linkedlist*> leftBucket; //Left bucket is considered 0
+    map<int, linkedlist*> rightBucket;    //Right bucket is considered 1
+    map<int, linkedlist*>* chosenBucket;
 
-    storeInBuckets(&leftBucket, &rightBucket, &Nodes);
+    int lBucketSize = 0;
+    int rBucketSize = 0;
+
+    storeInBuckets(&leftBucket, &rightBucket, &Nodes, &lBucketSize, &rBucketSize);
+    cout << "Left Size: " << lBucketSize << " R Size: " << rBucketSize << endl;
     
     /*
         Hereinlies the FM algorithm
         Repeat the following until both LBucket and RBucket is empty
-
-    
+        Choose the side with the largest key (and thus the largest gain) Using myMap.begin()->first
+        Loop to the end of the linked list
+        move that cell to the other side
+        Remove that cell from the bucket and place it on the timeline
+        For all nets connected to that cell:
+            For all nodes connected to that net:
+                Recalculate the node crossings (This can be a -1 if the node is now on the same side, +1 if the node is now on the other side)
+                Remove the node form th ebucket
+                Place the node in the reclaulted gain bucket
     */
+    int gainSelector = 0;    //0 if left, 1 if right
 
-    //Select the biggest gain and move it to the other side
+    while (leftBucket.size() != 0 || rightBucket.size() != 0) {
+        if (leftBucket.rbegin()->first - rightBucket.rbegin()->first >= 0) {
+            //Left bucket is bigger
+            gainSelector = leftBucket.rbegin()->first;
+            chosenBucket = &leftBucket;
+        } else {
+            //Right bucket is bigger
+            gainSelector = rightBucket.rbegin()->first;
+            chosenBucket = &rightBucket;
+        }
 
-    //Then, lock it and recalculate gains
-    //Repeat
+        cout << "gain is: " << gainSelector << endl;
 
+        // //Get the node at that DLL and follow it until the very end.
+        // linkedlist* dllNode = (*chosenBucket)[gain];
+        // if (dllNode != nullptr) {
+        //     while (dllNode->getNext() != nullptr) {
+        //         dllNode = dllNode->getNext();
+        //     }
+        //     //We should be at the last node
+        //     //Set this node to the next DLLNode and attach the pointer references
+        //     dllNode->setNext(insertDLLNode);
+        //     insertDLLNode->setPrev(dllNode);
+        // }
+
+
+    }
     
 
 
 
-    writeOutput(ofilepath,currentCutsize,Nodes);
+    // writeOutput(ofilepath,currentCutsize,Nodes);
     return 0;
 }
