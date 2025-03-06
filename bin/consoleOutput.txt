@@ -4,50 +4,67 @@
 o0 placed in Right Gain of 6 = (2 *4) - 2 No key
 o1 placed in Left  Gain of 1 = (2 *1) - 1 No key
 o2 placed in Left  Gain of -3 = (2 *0) - 3 No key
-o3 placed in Left  Gain of -1 = (2 *1) - 3 No key
-o4 placed in Left  Gain of 0 = (2 *1) - 2 No key
-o5 placed in Right Gain of -1 = (2 *1) - 3 No key
-p0 placed in Left  Gain of -1 = (2 *1) - 3 w/ key
-p1 placed in Right Gain of 0 = (2 *1) - 2 No key
-Left Size: 5 R Size: 3
+o3 placed in Right Gain of 1 = (2 *2) - 3 No key
+o4 placed in Right Gain of 2 = (2 *2) - 2 No key
+o5 placed in Left  Gain of -3 = (2 *0) - 3 w/ key
+p0 placed in Right Gain of 1 = (2 *2) - 3 w/ key
+p1 placed in Left  Gain of 0 = (2 *1) - 2 No key
+Left Size: 4 R Size: 4
 Largest key is in right bucket with a gain of: 6
 cutsize before pass: 3
-Starting search for node[0]: o0 with gain of 6 = (2*4) - 2
-Starting search for node[3]: o3 with gain of -1 = (2*1) - 3
-		Searching left bucket
-		Get the next node and move it to the head
-		New Gain: -3
-		Key exists, placed back in bucket with gain: -3
-Starting search for node[7]: p1 with gain of 0 = (2*1) - 2
-		Searching right bucket
+Removing node[0]: o0 in bucket 0 with gain of 6
+Entered removing from bucket
+Looping until the end looking for 0 in gain 6
+Found the node to delete
+grabbed next and prev
+set nodeUpdater to null
 		Removing key from bucket
-		New Gain: 2
-		Key does not exist, creating: 2
+Starting search for node[0]: o0 with gain of 6 = (2*4) - 2
+Starting search for node[3]: o3 with gain of 1 = (2*2) - 3
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: 3
+		Key does not exist, creating: 3
+		3
+Starting search for node[7]: p1 with gain of 0 = (2*1) - 2
+		Searching left bucket
+		Removing key from bucket
+		New Gain: -2
+		Key does not exist, creating: -2
 		7
 Starting search for node[1]: o1 with gain of 1 = (2*1) - 1
 		Searching left bucket
 		Removing key from bucket
 		New Gain: -1
-		Key exists, placed back in bucket with gain: -1
+		Key does not exist, creating: -1
+		1
 Starting search for node[2]: o2 with gain of -3 = (2*0) - 3
 		Searching left bucket
-		Currently at node[3]: o3
-		This is the last node, set prev to null
+		Get the next node and move it to the head
 		New Gain: -5
 		Key does not exist, creating: -5
 		2
-Starting search for node[6]: p0 with gain of -1 = (2*1) - 3
-		Searching left bucket
-		Currently at node[1]: o1
-		This is the last node, set prev to null
-		New Gain: -3
-		Key exists, placed back in bucket with gain: -3
-Starting search for node[5]: o5 with gain of -1 = (2*1) - 3
+Starting search for node[6]: p0 with gain of 1 = (2*2) - 3
 		Searching right bucket
 		Removing key from bucket
-		New Gain: 1
-		Key does not exist, creating: 1
-		5
+		New Gain: 3
+		Key exists, placed back in bucket with gain: 3
+Starting search for node[5]: o5 with gain of -3 = (2*0) - 3
+		Searching left bucket
+		Removing key from bucket
+		New Gain: -5
+		Key exists, placed back in bucket with gain: -5
 Starting search for node[0]: o0 with gain of 6 = (2*4) - 2
-cutsize after the pass3
-Largest key is in right bucket with a gain of: 6
+cutsize after the pass2
+Largest key is in right bucket with a gain of: 3
+cutsize before pass: 2
+Removing node[3]: o3 in bucket 0 with gain of 3
+Entered removing from bucket
+Looping until the end looking for 3 in gain 3
+		Currently at node[6]: p0
+Found the node to delete
+grabbed next and prev
+set nodeUpdater to null
+		This is the last node, set prev to null
+Starting search for node[0]: o0 with gain of 6 = (2*4) - 2
+		Searching left bucket
