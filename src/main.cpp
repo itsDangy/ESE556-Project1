@@ -330,13 +330,15 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
             // Left bucket is bigger
             gainSelector = leftBucket.rbegin()->first;
             chosenBucket = &leftBucket;
+            cout << "Largest key is in left bucket ";
         } else {
             // Right bucket is bigger
             gainSelector = rightBucket.rbegin()->first;
             chosenBucket = &rightBucket;
+            cout << "Largest key is in right bucket ";
         }
 
-        cout << "gain is: " << gainSelector << endl;
+        cout << " with a gain of: " << gainSelector << endl;
 
         // Loop to the end of the linked list
         linkedlist* dllNode = (*chosenBucket)[gainSelector];

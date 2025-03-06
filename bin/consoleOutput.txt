@@ -1,27 +1,25 @@
 10
 15
 
-o0 placed in Right Gain of -8 No key
-o1 placed in Right Gain of -8 w/ key
-o2 placed in Right Gain of -7 No key
-o3 placed in Right Gain of -4 No key
-o4 placed in Right Gain of -6 No key
-o5 placed in Left  Gain of -5 No key
-p0 placed in Left  Gain of -5 w/ key
-p1 placed in Left  Gain of -2 No key
-p2 placed in Left  Gain of -11 No key
-p3 placed in Right Gain of -8 w/ key
-Left Size: 4 R Size: 6
-gain is: -2
-currentNet: 0
+o0 placed in Right Gain of -10 No key
+o1 placed in Right Gain of -8 No key
+o2 placed in Left  Gain of -5 No key
+o3 placed in Left  Gain of -2 No key
+o4 placed in Right Gain of -8 w/ key
+o5 placed in Left  Gain of -5 w/ key
+p0 placed in Right Gain of -7 No key
+p1 placed in Left  Gain of 0 No key
+p2 placed in Right Gain of -11 No key
+p3 placed in Left  Gain of -6 No key
+Left Size: 5 R Size: 5
+Largest key is in left bucket  with a gain of: 0
+cutsize before pass15
 Starting search for node[9]: p3
-old gain is: -8
-		Searching right bucket
-		Currently at [0]: o0
-		Currently at [1]: o1
+old gain is: -6
+		Searching left bucket
 Starting search for node[2]: o2
-old gain is: -7
-		Searching right bucket
+old gain is: -5
+		Searching left bucket
 Starting search for node[0]: o0
-old gain is: -10
+old gain is: -12
 		Searching right bucket
