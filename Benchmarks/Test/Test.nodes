@@ -1,6 +1,6 @@
 UCLA nodes 1.0
-NumNodes : 10
-NumTerminals : 5
+NumNodes : 8
+NumTerminals : 3
 o0	7	3
 o1	2	5
 o2	1	7
@@ -9,5 +9,3 @@ o4	9	8
 o5	6	4	terminal
 p0	8	5	terminal_NI
 p1	10	11	terminal_NI
-p2	3	1	terminal_NI
-p3	11	9	terminal_NI

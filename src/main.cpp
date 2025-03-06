@@ -284,6 +284,61 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
     }
 }
 
+void removeFromBucket(map<int, linkedlist*>* chosenBucket, int gainSelector, int selectedNode, vector<Node>* Nodes) {
+    // Loop to the end of the linked list
+    linkedlist* nodeUpdater = (*chosenBucket)[gainSelector];
+    cout << "\t\tEntered removing from bucket" << endl;
+    if (nodeUpdater == nullptr) {
+        cerr << "Error: nodeUpdater is nullptr" << endl;
+        exit(EXIT_FAILURE);
+    }
+    cout << "\t\tLooping until the end looking for " << selectedNode << " in gain " << gainSelector << endl;
+    // Loop until the end of the node
+    // Or until we find the index we're looking for
+    while (nodeUpdater->getNodeID() != selectedNode) {
+        cout <<"\t\tCurrently at node[" << nodeUpdater->getNodeID() << "]: " << (*Nodes)[nodeUpdater->getNodeID()].getID() << endl;
+        if (nodeUpdater->getNext() == nullptr) {
+            //If this triggers, we are at the end of the list
+            cerr << "Error: nodeUpdater->getNext() is nullptr" << endl;
+            exit(EXIT_FAILURE);
+        }
+        nodeUpdater = nodeUpdater->getNext();
+    }
+    cout << "\t\tFound the node to delete" << endl;
+    // nodeUpdater now has the node we're trying to move
+    // Update the DLL to remove nodeUpdater from the area
+    // If nodeUpdater.getPrev() is nullptr, it is the first.
+    // If nodeUpdater.getNext() is nullptr, it is the last.
+    // If it is both, remove the key entirely from the map
+    linkedlist* nodeUpdaterPrev = nodeUpdater->getPrev();
+    linkedlist* nodeUpdaterNext = nodeUpdater->getNext();
+    cout << "\t\tGrabbed next and prev" << endl;
+    // Set nodeupdater to default nullptrs for both
+    nodeUpdater->setPrev(nullptr);
+    nodeUpdater->setNext(nullptr);
+
+    cout << "\t\tSet nodeUpdater to null" << endl;
+    if (nodeUpdaterPrev == nullptr && nodeUpdaterNext == nullptr) {
+        cout << "\t\tRemoving key from bucket" << endl;
+        (*chosenBucket).erase(gainSelector);
+    } else if (nodeUpdaterPrev == nullptr && nodeUpdaterNext != nullptr) {
+        cout << "\t\tGet the next node and move it to the head" << endl;
+        // This is the first node, link this to the head in the key
+        (*chosenBucket)[gainSelector] = nodeUpdaterNext;
+        nodeUpdaterNext->setPrev(nullptr);
+    } else if (nodeUpdaterPrev != nullptr && nodeUpdaterNext == nullptr) {
+        // This is the last node, simply remove the previous connection
+        cout << "\t\tThis is the last node, set prev to null" << endl;
+        nodeUpdaterPrev->setNext(nullptr);
+    } else {
+        // Standard case, simply stitch the DLL back together
+        cout << "\t\tFound in the middle" << endl;
+        nodeUpdaterPrev->setNext(nodeUpdaterNext);
+        nodeUpdaterNext->setPrev(nodeUpdaterPrev);
+        
+    }
+}
+
 void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     // For all terminal nodes, ensure that they will no longer move.
 
@@ -355,11 +410,11 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
         // At this point we are at the last node
         selectedNode = (*dllNode).getNodeID(); 
         
-        linkedlist* prevNode = dllNode->getPrev();
-        if (prevNode != nullptr) {
-            prevNode->setNext(nullptr);
-        }
-        delete dllNode; // Use delete instead of free for C++ objects
+        // linkedlist* prevNode = dllNode->getPrev();
+        // if (prevNode != nullptr) {
+        //     prevNode->setNext(nullptr);
+        // }
+        // delete dllNode; // Use delete instead of free for C++ objects
 
         struct timePoint point;
         point.lockedNode = selectedNode;
@@ -370,7 +425,15 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
 
         bool inc_cutsize, dec_cutsize; // flags that indicate if the cutsize should be incremented or decremented. 
 
+
+        //Remove the the selectedNode out of the bucket structure
+        cout << "Removing node[" << selectedNode << "]: " << (*Nodes)[selectedNode].getID() << " in bucket " << (*Nodes)[selectedNode].whichPartition() << " with gain of " << gainSelector << endl;
+        removeFromBucket(chosenBucket, gainSelector, selectedNode, Nodes);
+
+        //Once removed, then update the parition
         (*Nodes)[selectedNode].movePartition();
+                
+        
         // i refers to the index of the current net
         for (int i = 0; i < (*Nodes)[selectedNode].getConnectedNets().size(); i++) {
             int currentNet = (*Nodes)[selectedNode].getConnectedNets()[i];
@@ -438,6 +501,7 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                 } else if (nodeUpdaterPrev == nullptr && nodeUpdaterNext != nullptr) {
                     // This is the first node, link this to the head in the key
                     (*nodeUpdaterBucket)[oldGain] = nodeUpdaterNext;
+                    nodeUpdaterNext->setPrev(nullptr);
                     cout << "\t\tGet the next node and move it to the head" << endl;
                 } else if (nodeUpdaterPrev != nullptr && nodeUpdaterNext == nullptr) {
                     // This is the last node, simply remove the previous connection
