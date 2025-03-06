@@ -429,6 +429,8 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
         //Remove the the selectedNode out of the bucket structure
         cout << "Removing node[" << selectedNode << "]: " << (*Nodes)[selectedNode].getID() << " in bucket " << (*Nodes)[selectedNode].whichPartition() << " with gain of " << gainSelector << endl;
         removeFromBucket(chosenBucket, gainSelector, selectedNode, Nodes);
+        //Ensure that the removed node is locked
+        (*Nodes)[selectedNode].lockNode();
 
         //Once removed, then update the parition
         (*Nodes)[selectedNode].movePartition();
@@ -449,7 +451,8 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                 cout << "Starting search for node[" << lookingFor << "]: " << (*Nodes)[lookingFor].getID() << " with gain of " << oldGain << " = (2*" << (*Nodes)[lookingFor].getCrossings() << ") - " << (*Nodes)[lookingFor].getConnectedNets().size() << endl;
                 
                 //This is the same node that we've now locked, skip
-                if (lookingFor == selectedNode) {
+                //Also skip if the node is already locked
+                if (lookingFor == selectedNode || (*Nodes)[lookingFor].getLockStatus() == 1) {
                     break;
                 }
                 
@@ -548,9 +551,10 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
             if(inc_cutsize){cutsize++;}
             if(dec_cutsize){cutsize--;}
         }
-        cout<< "cutsize after the pass" << cutsize << endl; 
+        cout<< "cutsize after the pass: " << cutsize << endl; 
     }
 
+    cout << "Buckets are empty" << endl;
 // Here, all cells are now fixed and emptied out of the buckets.
     // Roll back the changes from the timeline one by one until we've reached the lowest cutsize during this iteration
     // Lowest cutsize is found in variable lowestCutsize, so just keep rolling back until we've gotten to a point in history

@@ -14,6 +14,7 @@ private:
     int area; // area of the cell.  
     bool terminal_;
     bool partition;     //This is going to be left or right (0 or left, 1 for right)
+    bool locked;        //0 for unlocked, 1 for locked
     int crossings;      //This is used to determine the gain sizes
     vector<int> connectedNets; // a vector of index of nets connected to this given node as they are all sequentially given in the .nets file.
     
@@ -27,6 +28,7 @@ public:
         terminal_ = terminal;
         area = width * height;
         crossings = 0;
+        locked = 0;
     };
     ~Node() {};
 
@@ -49,6 +51,11 @@ public:
     void decCrossings() {crossings--;}
     int getCrossings() {return crossings;}
     void setCrossings(int i) {crossings = i;}
+
+    //Lock and unlock
+    void lockNode() {locked = 1;}
+    void unlockNode() {locked = 0;}
+    bool getLockStatus() {return locked;}
 };
 
 #endif //Node_H
