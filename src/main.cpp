@@ -276,53 +276,16 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
     }
 }
 
-int main() {
-    string benchmark = "superblue18";
+void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
+    //For all terminal nodes, ensure that they will no longer move.
 
-    cout << "Which benchmark would you like to run? (Blank will run superblue18)" << endl;
-    cin >> benchmark;
-
-    string ifilepath = "../Benchmarks/" + benchmark + "/" + benchmark;
-    string ofilepath = "../Output/" + benchmark + "_Output.txt";
-
-    //Parse the nodes
-    vector<Node> Nodes;
-    Nodes = parseNodes(ifilepath+".nodes");
-    cout << Nodes.size() << endl;
-
-    vector<Net> Nets;
-    Nets = parseNets(ifilepath+".nets", &Nodes);
-    cout << Nets.size() << endl;
-
-    cout << Nodes[45].getID() << endl;
-    vector<int> test = Nodes[45].getConnectedNets();
-    for (auto i : test) {
-        cout << i << " ";
-    }
-
-    //Check the area constructor
-    // for (int i = 146; i < 166; i++) {
-    //     cout << Nodes[i].getArea() << endl;
-    // }
-
-    //At this time, we should have everything parsed into the correct data structures
+    //Determine the gains, store the current gains in the Nodes structure.
+    int cutsize = calculateCrossings(Nodes, Nets);
 
     //Creates the timeline necessary for FM to climb hills and work
     //The index will be the iteration number, while the timePoint struct holds the relevant information for that paticular iteration
     vector<timePoint> timeline;
     int lowestCutsize = INT_MAX;    //This will be used and updated as we find the lowest cutsize
-
-    //Create the inital cut
-    //Randomly assign all nodes a status of either left or right
-    srand(time(0));
-    for (int i = 0; i < numNodes; i++) {
-        Nodes[i].setPartition(rand() % 2);
-    }
-
-    //For all terminal nodes, ensure that they will no longer move.
-
-    //Determine the gains, store the current gains in the Nodes structure.
-    int cutsize = calculateCrossings(&Nodes, &Nets);
 
     //Create 2 buckets -- left and right
     //This bucket is a unordered map (Hashmap), whos key is an int going form PMAX to -PMAX.
@@ -335,7 +298,7 @@ int main() {
     int lBucketSize = 0;
     int rBucketSize = 0;
 
-    storeInBuckets(&leftBucket, &rightBucket, &Nodes, &lBucketSize, &rBucketSize);
+    storeInBuckets(&leftBucket, &rightBucket, Nodes, &lBucketSize, &rBucketSize);
     cout << "Left Size: " << lBucketSize << " R Size: " << rBucketSize << endl;
     
     /*
@@ -392,18 +355,18 @@ int main() {
         struct timePoint point;
         point.lockedNode = selectedNode;
         point.cutSize = cutsize;
-        point.ratio = getAreaRatio(Nodes); 
+        point.ratio = getAreaRatio(*Nodes); 
         timeline.push_back(point);
 
         
 
-        Nodes[selectedNode].movePartition();
+        (*Nodes)[selectedNode].movePartition();
         //i refers to the index of the current net
-        for (int i = 0; i < Nodes[selectedNode].getConnectedNets().size(); i++) {
-            int currentNet = Nodes[selectedNode].getConnectedNets()[i];
+        for (int i = 0; i < (*Nodes)[selectedNode].getConnectedNets().size(); i++) {
+            int currentNet = (*Nodes)[selectedNode].getConnectedNets()[i];
             //j refers to the index of the current node
-            for (int j = 0; j < Nets[currentNet].getConnectedNodes().size(); j++) {
-                int oldGain = 2*(Nodes[j].getCrossings()) - Nodes[j].getConnectedNets().size();
+            for (int j = 0; j < (*Nets)[currentNet].getConnectedNodes().size(); j++) {
+                int oldGain = 2*((*Nodes)[j].getCrossings()) - (*Nodes)[j].getConnectedNets().size();
 
                 //Find the jnode and remove it from the bucket structure
                 //Loop to the end of the linked list
@@ -414,7 +377,7 @@ int main() {
 
                 //Loop until the end of the node
                 //Or until we find the index we're looking for
-                int lookingFor = Nets[currentNet].getConnectedNodes()[j];
+                int lookingFor = (*Nets)[currentNet].getConnectedNodes()[j];
                 while (nodeUpdater->getNodeID() != lookingFor) {
                     if (nodeUpdater->getNext() != nullptr) {
                         exit(EXIT_FAILURE);
@@ -450,14 +413,14 @@ int main() {
 
 
 
-                if (Nodes[selectedNode].whichPartition() ^ Nodes[j].whichPartition()) {
+                if ((*Nodes)[selectedNode].whichPartition() ^ (*Nodes)[j].whichPartition()) {
                     //They are different sides
-                    Nodes[j].incCrossings();
+                    (*Nodes)[j].incCrossings();
                 } else {
                     //they are same sides
-                    Nodes[j].decCrossings();
+                    (*Nodes)[j].decCrossings();
                 }
-                int newGain = 2*(Nodes[j].getCrossings()) - Nodes[j].getConnectedNets().size();
+                int newGain = 2*((*Nodes)[j].getCrossings()) - (*Nodes)[j].getConnectedNets().size();
 
 
                 //Place the selected node back into the correct bucket
@@ -485,10 +448,54 @@ int main() {
             break;
         }
         //Otherwise flip the node and continue
-        Nodes[timeline[i].lockedNode].movePartition();
+        (*Nodes)[timeline[i].lockedNode].movePartition();
     }
 
     //This is the most efficient cutsize of the current FM pass
+}
+
+int main() {
+    string benchmark = "superblue18";
+
+    cout << "Which benchmark would you like to run? (Blank will run superblue18)" << endl;
+    cin >> benchmark;
+
+    string ifilepath = "../Benchmarks/" + benchmark + "/" + benchmark;
+    string ofilepath = "../Output/" + benchmark + "_Output.txt";
+
+    //Parse the nodes
+    vector<Node> Nodes;
+    Nodes = parseNodes(ifilepath+".nodes");
+    cout << Nodes.size() << endl;
+
+    vector<Net> Nets;
+    Nets = parseNets(ifilepath+".nets", &Nodes);
+    cout << Nets.size() << endl;
+
+    cout << Nodes[45].getID() << endl;
+    vector<int> test = Nodes[45].getConnectedNets();
+    for (auto i : test) {
+        cout << i << " ";
+    }
+
+    //Check the area constructor
+    // for (int i = 146; i < 166; i++) {
+    //     cout << Nodes[i].getArea() << endl;
+    // }
+
+    //At this time, we should have everything parsed into the correct data structures
+
+    
+
+    //Create the inital cut
+    //Randomly assign all nodes a status of either left or right
+    srand(time(0));
+    for (int i = 0; i < numNodes; i++) {
+        Nodes[i].setPartition(rand() % 2);
+    }
+
+    fmpass(&Nodes, &Nets);
+    
 
 
 
