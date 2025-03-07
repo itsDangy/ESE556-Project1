@@ -459,7 +459,6 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
         point.ratio = getAreaRatio(*Nodes); 
         timeline.push_back(point);
         cout <<"cutsize before pass: " << cutsize << endl;
-        printBuckets(leftBucket, rightBucket, selectedNode, Nodes,timeline);
 
 
         bool inc_cutsize, dec_cutsize; // flags that indicate if the cutsize should be incremented or decremented. 
@@ -473,6 +472,8 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
 
         //Once removed, then update the parition
         (*Nodes)[selectedNode].movePartition();
+        
+        printBuckets(leftBucket, rightBucket, selectedNode, Nodes,timeline);
                 
         
         // i refers to the index of the current net
