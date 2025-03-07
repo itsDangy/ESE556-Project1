@@ -455,7 +455,7 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     */
     int gainSelector = 0;    //0 if left, 1 if right
 
-    while (leftBucket.size() != 0 || rightBucket.size() != 0) {
+    while (leftBucket.size() != 0 && rightBucket.size() != 0) {
 // Choose the side with the largest key
         if (leftBucket.rbegin()->first - rightBucket.rbegin()->first >= 0) {
             if (logLevelGlobal > 2) {
