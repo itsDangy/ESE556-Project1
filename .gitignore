@@ -1,3 +1,12 @@
 src/a.exe
 src/Node.h.gch
 src/consoleOutput.txt
+.cdsinit
+.runset.calibre.drc
+.gitignore
+.runset.calibre.lfd
+.runset.calibre.lvs
+.runset.calibre.pex
+.gitignore
+cds.lib
+lib.defs
