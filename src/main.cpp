@@ -18,6 +18,7 @@ int numNodes = -1;
 int numTerm = -1;
 int numNets = -1;
 int offset;
+int logLevelGlobal;
 
 struct timePoint { 
     int lockedNode; 
@@ -233,25 +234,34 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
     map<int, linkedlist*> *currentBucket; //Used to effectively swap between the two buckets
     //Seperate the nodes out to the buckets, dependant on parition and gain.
     for (int i = 0; i < numNodes; i++) {
-
-        cout << (*Nodes)[i].getID() << " placed in ";
+        if (logLevelGlobal > 2) {
+            cout << (*Nodes)[i].getID() << " placed in ";
+        }
+        
         
         if ((*Nodes)[i].whichPartition() == 1) {
             //If the partition is the left
             currentBucket = leftBucket;
             (*lSize)++;
-            cout << "Left  ";
+            if (logLevelGlobal > 2) {
+                cout << "Left  ";
+            }
         } else {
             //If the partition is on the right
             currentBucket = rightBucket;
             (*rSize)++;
-            cout << "Right ";
+            if (logLevelGlobal > 2) {
+                cout << "Right ";
+            }
         }
 
         //Calculate the gain (See function calculateCrossings for more information)
         //gain = 2*crossings - totalNets
         int gain = 2*(*Nodes)[i].getCrossings() - (*Nodes)[i].getConnectedNets().size();
-        cout << "Gain of " << gain << " = (2 *" << (*Nodes)[i].getCrossings() << ") - " << (*Nodes)[i].getConnectedNets().size();
+        if (logLevelGlobal > 2) {
+            cout << "Gain of " << gain << " = (2 *" << (*Nodes)[i].getCrossings() << ") - " << (*Nodes)[i].getConnectedNets().size();
+        }
+        
 
         //Create a new DLLnode, whose value is the index of the node
         // Allocate memory on the heap so it persists after the loop iteration
@@ -264,10 +274,14 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
 
             //Insert this DLL node's address to the hashmap with key of crossings
             (*currentBucket)[gain] = insertDLLNode;
-            cout << " No key" << endl;
+            if (logLevelGlobal > 2) {
+                cout << " No key" << endl;
+            }
         } else {
             //If the key is present
-            cout << " w/ key" << endl;
+            if (logLevelGlobal > 2) {
+                cout << " w/ key" << endl;
+            }
 
             //Get the node at that DLL and follow it until the very end.
             linkedlist* dllNode = (*currentBucket)[gain];
@@ -287,16 +301,22 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
 void removeFromBucket(map<int, linkedlist*>* chosenBucket, int gainSelector, int selectedNode, vector<Node>* Nodes) {
     // Loop to the end of the linked list
     linkedlist* nodeUpdater = (*chosenBucket)[gainSelector];
-    cout << "\t\tEntered removing from bucket" << endl;
+    if (logLevelGlobal > 2) {
+        cout << "\t\tEntered removing from bucket" << endl;
+    }
     if (nodeUpdater == nullptr) {
         cerr << "Error: nodeUpdater is nullptr" << endl;
         exit(EXIT_FAILURE);
     }
-    cout << "\t\tLooping until the end looking for " << selectedNode << " in gain " << gainSelector << endl;
+    if (logLevelGlobal > 2) {
+        cout << "\t\tLooping until the end looking for " << selectedNode << " in gain " << gainSelector << endl;
+    }
     // Loop until the end of the node
     // Or until we find the index we're looking for
     while (nodeUpdater->getNodeID() != selectedNode) {
-        cout <<"\t\tCurrently at node[" << nodeUpdater->getNodeID() << "]: " << (*Nodes)[nodeUpdater->getNodeID()].getID() << endl;
+        if (logLevelGlobal > 2) {
+            cout <<"\t\tCurrently at node[" << nodeUpdater->getNodeID() << "]: " << (*Nodes)[nodeUpdater->getNodeID()].getID() << endl;
+        }
         if (nodeUpdater->getNext() == nullptr) {
             //If this triggers, we are at the end of the list
             cerr << "Error: nodeUpdater->getNext() is nullptr" << endl;
@@ -304,7 +324,10 @@ void removeFromBucket(map<int, linkedlist*>* chosenBucket, int gainSelector, int
         }
         nodeUpdater = nodeUpdater->getNext();
     }
-    cout << "\t\tFound the node to delete" << endl;
+    if (logLevelGlobal > 2) {
+        cout << "\t\tFound the node to delete" << endl;
+    }
+    
     // nodeUpdater now has the node we're trying to move
     // Update the DLL to remove nodeUpdater from the area
     // If nodeUpdater.getPrev() is nullptr, it is the first.
@@ -312,27 +335,38 @@ void removeFromBucket(map<int, linkedlist*>* chosenBucket, int gainSelector, int
     // If it is both, remove the key entirely from the map
     linkedlist* nodeUpdaterPrev = nodeUpdater->getPrev();
     linkedlist* nodeUpdaterNext = nodeUpdater->getNext();
-    cout << "\t\tGrabbed next and prev" << endl;
+    if (logLevelGlobal > 2) {
+        cout << "\t\tGrabbed next and prev" << endl;
+    }
     // Set nodeupdater to default nullptrs for both
     nodeUpdater->setPrev(nullptr);
     nodeUpdater->setNext(nullptr);
-
-    cout << "\t\tSet nodeUpdater to null" << endl;
+    if (logLevelGlobal > 2) {
+	    cout << "\t\tSet nodeUpdater to null" << endl;
+    }
     if (nodeUpdaterPrev == nullptr && nodeUpdaterNext == nullptr) {
-        cout << "\t\tRemoving key from bucket" << endl;
+        if (logLevelGlobal > 2) {
+	        cout << "\t\tRemoving key from bucket" << endl;
+        }
         (*chosenBucket).erase(gainSelector);
     } else if (nodeUpdaterPrev == nullptr && nodeUpdaterNext != nullptr) {
-        cout << "\t\tGet the next node and move it to the head" << endl;
+        if (logLevelGlobal > 2) {
+	        cout << "\t\tGet the next node and move it to the head" << endl;
+        }
         // This is the first node, link this to the head in the key
         (*chosenBucket)[gainSelector] = nodeUpdaterNext;
         nodeUpdaterNext->setPrev(nullptr);
     } else if (nodeUpdaterPrev != nullptr && nodeUpdaterNext == nullptr) {
         // This is the last node, simply remove the previous connection
-        cout << "\t\tThis is the last node, set prev to null" << endl;
+        if (logLevelGlobal > 2) {
+	        cout << "\t\tThis is the last node, set prev to null" << endl;
+        }
         nodeUpdaterPrev->setNext(nullptr);
     } else {
         // Standard case, simply stitch the DLL back together
-        cout << "\t\tFound in the middle" << endl;
+        if (logLevelGlobal > 2) {
+	        cout << "\t\tFound in the middle" << endl;
+        }
         nodeUpdaterPrev->setNext(nodeUpdaterNext);
         nodeUpdaterNext->setPrev(nodeUpdaterPrev);
         
@@ -398,8 +432,13 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     int rBucketSize = 0;
 
     storeInBuckets(&leftBucket, &rightBucket, Nodes, &lBucketSize, &rBucketSize);
-    cout << "Left Size: " << lBucketSize << " R Size: " << rBucketSize << endl;
-    printBuckets(leftBucket, rightBucket, -1, Nodes,timeline);
+    if (logLevelGlobal > 2) {
+        cout << "Left Size: " << lBucketSize << " R Size: " << rBucketSize << endl;
+    }
+
+    if (logLevelGlobal > 0) {
+        printBuckets(leftBucket, rightBucket, -1, Nodes,timeline);
+    }
     
     /*
         Hereinlies the FM algorithm
@@ -419,19 +458,24 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     while (leftBucket.size() != 0 && rightBucket.size() != 0) {
 // Choose the side with the largest key
         if (leftBucket.rbegin()->first - rightBucket.rbegin()->first >= 0) {
+            if (logLevelGlobal > 2) {
+                cout << "Largest key is in left bucket ";
+            }
             // Left bucket is bigger
             gainSelector = leftBucket.rbegin()->first;
             chosenBucket = &leftBucket;
-            cout << "Largest key is in left bucket ";
         } else {
             // Right bucket is bigger
+            if (logLevelGlobal > 2) {
+                cout << "Largest key is in right bucket ";
+            }
             gainSelector = rightBucket.rbegin()->first;
             chosenBucket = &rightBucket;
-            cout << "Largest key is in right bucket ";
         }
-
-        cout << "with a gain of: " << gainSelector << endl;
-
+        if (logLevelGlobal > 2) {
+	        cout << "with a gain of: " << gainSelector << endl;
+        }
+        
         // Loop to the end of the linked list
         linkedlist* dllNode = (*chosenBucket)[gainSelector];
         int selectedNode = -1;
@@ -458,22 +502,31 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
         point.cutSize = cutsize;
         point.ratio = getAreaRatio(*Nodes); 
         timeline.push_back(point);
-        cout <<"cutsize before pass: " << cutsize << endl;
+        if (logLevelGlobal > 2) {
+	        cout <<"cutsize before pass: " << cutsize << endl;
+        }
+        
 
 
         bool inc_cutsize, dec_cutsize; // flags that indicate if the cutsize should be incremented or decremented. 
 
 
         //Remove the the selectedNode out of the bucket structure
-        cout << "Removing node[" << selectedNode << "]: " << (*Nodes)[selectedNode].getID() << " in bucket " << (*Nodes)[selectedNode].whichPartition() << " with gain of " << gainSelector << endl;
+        if (logLevelGlobal > 2) {
+	        cout << "Removing node[" << selectedNode << "]: " << (*Nodes)[selectedNode].getID() << " in bucket " << (*Nodes)[selectedNode].whichPartition() << " with gain of " << gainSelector << endl;
+        }
         removeFromBucket(chosenBucket, gainSelector, selectedNode, Nodes);
         //Ensure that the removed node is locked
         (*Nodes)[selectedNode].lockNode();
 
         //Once removed, then update the parition
         (*Nodes)[selectedNode].movePartition();
+
+        if (logLevelGlobal > 0) {
+            printBuckets(leftBucket, rightBucket, selectedNode, Nodes,timeline);
+        }
         
-        printBuckets(leftBucket, rightBucket, selectedNode, Nodes,timeline);
+        
                 
         
         // i refers to the index of the current net
@@ -490,8 +543,9 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                 int lookingFor = (*Nets)[currentNet].getConnectedNodes()[j];
                 int oldGain = (2 * (*Nodes)[lookingFor].getCrossings()) - (*Nodes)[lookingFor].getConnectedNets().size();
                 map<int, linkedlist*>* nodeUpdaterBucket;
-
-                cout << "Starting search for node[" << lookingFor << "]: " << (*Nodes)[lookingFor].getID() << " with gain of " << oldGain << " = (2*" << (*Nodes)[lookingFor].getCrossings() << ") - " << (*Nodes)[lookingFor].getConnectedNets().size() << endl;
+                if (logLevelGlobal > 2) {
+	                cout << "Starting search for node[" << lookingFor << "]: " << (*Nodes)[lookingFor].getID() << " with gain of " << oldGain << " = (2*" << (*Nodes)[lookingFor].getCrossings() << ") - " << (*Nodes)[lookingFor].getConnectedNets().size() << endl;
+                }
                 
                 //This is the same node that we've now locked, skip
                 //Also skip if the node is already locked
@@ -502,11 +556,15 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                 if ((*Nodes)[lookingFor].whichPartition() == 1) {
                     //The node we are looking for is in the right bucket
                     nodeUpdaterBucket = &leftBucket;
-                    cout << "\t\tSearching left bucket" << endl;
+                    if (logLevelGlobal > 2) {
+	                    cout << "\t\tSearching left bucket" << endl;
+                    }
                 } else {
                     //The node are looking for is in the left bucket
                     nodeUpdaterBucket = &rightBucket;
-                    cout << "\t\tSearching right bucket" << endl;
+                    if (logLevelGlobal > 2) {
+	                    cout << "\t\tSearching right bucket" << endl;
+                    }
                 }
 
                 // Find the jnode and remove it from the bucket structure
@@ -520,7 +578,9 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                 // Loop until the end of the node
                 // Or until we find the index we're looking for
                 while (nodeUpdater->getNodeID() != lookingFor) {
-                    cout <<"\t\tCurrently at node[" << nodeUpdater->getNodeID() << "]: " << (*Nodes)[nodeUpdater->getNodeID()].getID() << endl;
+                    if (logLevelGlobal > 2) {
+	                    cout <<"\t\tCurrently at node[" << nodeUpdater->getNodeID() << "]: " << (*Nodes)[nodeUpdater->getNodeID()].getID() << endl;
+                    }
                     if (nodeUpdater->getNext() == nullptr) {
                         //If this triggers, we are at the end of the list
                         cerr << "Error: nodeUpdater->getNext() is nullptr" << endl;
@@ -543,21 +603,29 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
 
                 if (nodeUpdaterPrev == nullptr && nodeUpdaterNext == nullptr) {
                     (*nodeUpdaterBucket).erase(oldGain);
-                    cout << "\t\tRemoving key from bucket" << endl;
+                    if (logLevelGlobal > 2) {
+	                    cout << "\t\tRemoving key from bucket" << endl;
+                    }
                 } else if (nodeUpdaterPrev == nullptr && nodeUpdaterNext != nullptr) {
                     // This is the first node, link this to the head in the key
                     (*nodeUpdaterBucket)[oldGain] = nodeUpdaterNext;
                     nodeUpdaterNext->setPrev(nullptr);
-                    cout << "\t\tGet the next node and move it to the head" << endl;
+                    if (logLevelGlobal > 2) {
+	                    cout << "\t\tGet the next node and move it to the head" << endl;
+                    }
                 } else if (nodeUpdaterPrev != nullptr && nodeUpdaterNext == nullptr) {
                     // This is the last node, simply remove the previous connection
                     nodeUpdaterPrev->setNext(nullptr);
-                    cout << "\t\tThis is the last node, set prev to null" << endl;
+                    if (logLevelGlobal > 2) {
+	                    cout << "\t\tThis is the last node, set prev to null" << endl;
+                    }
                 } else {
+                    if (logLevelGlobal > 2) {
+	                    cout << "\t\tFound in the middle" << endl;
+                    }
                     // Standard case, simply stitch the DLL back together
                     nodeUpdaterPrev->setNext(nodeUpdaterNext);
                     nodeUpdaterNext->setPrev(nodeUpdaterPrev);
-                    cout << "\t\tFound in the middle" << endl;
                 }
 
                 if ((*Nodes)[selectedNode].whichPartition() ^ (*Nodes)[lookingFor].whichPartition()) {
@@ -573,7 +641,9 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                     (*Nodes)[lookingFor].decCrossings();
                 }
                 int newGain = 2 * ((*Nodes)[lookingFor].getCrossings()) - (*Nodes)[lookingFor].getConnectedNets().size();
-                cout << "\t\tNew Gain: "<< newGain << endl;
+                if (logLevelGlobal > 2) {
+	                cout << "\t\tNew Gain: "<< newGain << endl;
+                }
 
                 // Place the selected node back into the same bucket with the new gain
                 if ((*nodeUpdaterBucket).find(newGain) != (*nodeUpdaterBucket).end()) {
@@ -582,26 +652,36 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                     (*nodeUpdaterBucket)[newGain] = nodeUpdater;
                     nodeUpdater->setNext(nodeUpdaterNext);
                     nodeUpdaterNext->setPrev(nodeUpdater);
-                    cout << "\t\tKey exists, placed back in bucket with gain: " << newGain << endl;
+                    if (logLevelGlobal > 2) {
+	                    cout << "\t\tKey exists, placed back in bucket with gain: " << newGain << endl;
+                    }
 
                 } else {
                     // If the key does not exist, add it to the map
                     (*nodeUpdaterBucket)[newGain] = nodeUpdater;
-                    cout << "\t\tKey does not exist, creating: " << newGain << endl;
-                    cout << "\t\t" << (*nodeUpdaterBucket)[newGain]->getNodeID() << endl;
+                    if (logLevelGlobal > 2) {
+                        cout << "\t\tKey does not exist, creating: " << newGain << endl;
+                        cout << "\t\t" << (*nodeUpdaterBucket)[newGain]->getNodeID() << endl;
+                    }  
                 }
             }
             if(inc_cutsize){cutsize++;}
             if(dec_cutsize){cutsize--;}
         }
-        cout<< "cutsize after the pass: " << cutsize << endl; 
+        if (logLevelGlobal > 2) {
+	        cout<< "cutsize after the pass: " << cutsize << endl; 
+        }
         if (cutsize < lowestCutsize)
             lowestCutsize = cutsize;
     }
 
-    printBuckets(leftBucket, rightBucket, -1, Nodes,timeline);
+    if (logLevelGlobal > 1) {
+	    printBuckets(leftBucket, rightBucket, -1, Nodes,timeline);
+    }
 
-    cout << "Buckets are empty" << endl;
+    if (logLevelGlobal > 2) {
+	    cout << "Buckets are empty" << endl;
+    }
 // Here, all cells are now fixed and emptied out of the buckets.
     // Roll back the changes from the timeline one by one until we've reached the lowest cutsize during this iteration
     // Lowest cutsize is found in variable lowestCutsize, so just keep rolling back until we've gotten to a point in history
@@ -620,13 +700,45 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     
 }
 
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        cerr << "Exactly one argument required -- name of test vector." << endl;
+// Function to parse command-line arguments
+void parseArguments(int argc, char *argv[], string &benchmark, int &logLevel) {
+    if (argc < 3) {
+        cerr << "Usage: " << argv[0] << " -log X -input Test" << endl;
+        // cerr << "Usage: " << argv[0] << " -log X -input Test" << endl;
         exit(EXIT_FAILURE);
     }
 
-    string benchmark = argv[1];
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "-log") == 0) {
+            if (i + 1 < argc) {
+                logLevel = atoi(argv[i + 1]);
+                i++;
+            } else {
+                cerr << "Error: -log option requires an argument." << endl;
+                exit(EXIT_FAILURE);
+            }
+        } else if (strcmp(argv[i], "-input") == 0) {
+            if (i + 1 < argc) {
+                benchmark = argv[i + 1];
+                i++;
+            } else {
+                cerr << "Error: -input option requires an argument." << endl;
+                exit(EXIT_FAILURE);
+            }
+        } else {
+            cerr << "Unknown option: " << argv[i] << endl;
+            exit(EXIT_FAILURE);
+        }
+    }
+}
+
+int main(int argc, char *argv[]) {
+
+    string benchmark;
+    int logLevel;
+    // Parse command-line arguments
+    parseArguments(argc, argv, benchmark, logLevel);
+    logLevelGlobal = logLevel;
 
     // string benchmark = "superblue18";
 
@@ -639,16 +751,23 @@ int main(int argc, char *argv[]) {
     //Parse the nodes
     vector<Node> Nodes;
     Nodes = parseNodes(ifilepath+".nodes");
-    cout << Nodes.size() << endl;
+    if (logLevel > 0) {
+        cout << "Number of nodes: " << Nodes.size() << endl;
+    }
 
     vector<Net> Nets;
     Nets = parseNets(ifilepath+".nets", &Nodes);
-    cout << Nets.size() << endl;
+    if (logLevel > 0) {
+        cout << "Number of nets: " << Nets.size() << endl;
+    }
 
-    cout << Nodes[45].getID() << endl;
-    vector<int> test = Nodes[45].getConnectedNets();
-    for (auto i : test) {
-        cout << i << " ";
+    if (logLevel > 1) {
+        cout << "Node 45 ID: " << Nodes[45].getID() << endl;
+        vector<int> test = Nodes[45].getConnectedNets();
+        for (auto i : test) {
+            cout << i << " ";
+        }
+        cout << endl;
     }
 
     //Check the area constructor
