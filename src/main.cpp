@@ -834,8 +834,8 @@ int main(int argc, char *argv[]) {
         Nodes[i].setPartition(rand() % 2);
     }
 
-    int cut = -1;
-    int lastCut = -1;
+    int cut = INT_MAX;
+    int lastCut = INT_MAX;
 
     do{
         lastCut = cut;
@@ -846,7 +846,7 @@ int main(int argc, char *argv[]) {
 
 
 
-    // writeOutput(ofilepath,currentCutsize,Nodes);
+    writeOutput(ofilepath,lastCut,Nodes);
     return 0;
 
 }
