@@ -10,3 +10,5 @@ src/consoleOutput.txt
 .gitignore
 cds.lib
 lib.defs
+bin/FM_WKK
+bin/main.o
