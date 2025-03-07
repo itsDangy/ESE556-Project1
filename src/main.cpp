@@ -375,7 +375,7 @@ void printBuckets(map<int, linkedlist*> leftBucket, map<int, linkedlist*> rightB
     cout << endl;
 }
 
-void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
+int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     // For all terminal nodes, ensure that they will no longer move.
 
     // Determine the gains, store the current gains in the Nodes structure.
@@ -479,6 +479,9 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
         // i refers to the index of the current net
         for (int i = 0; i < (*Nodes)[selectedNode].getConnectedNets().size(); i++) {
             int currentNet = (*Nodes)[selectedNode].getConnectedNets()[i];
+            inc_cutsize = false;
+            dec_cutsize=false;
+
             //j refers to the index of the current node
             for (int j = 0; j < (*Nets)[currentNet].getConnectedNodes().size(); j++) {
                 // int oldGain = (2 * ((*Nodes)[j].getCrossings())) - (*Nodes)[j].getConnectedNets().size();
@@ -592,6 +595,8 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
             if(dec_cutsize){cutsize--;}
         }
         cout<< "cutsize after the pass: " << cutsize << endl; 
+        if (cutsize < lowestCutsize)
+            lowestCutsize = cutsize;
     }
 
     printBuckets(leftBucket, rightBucket, -1, Nodes,timeline);
@@ -610,6 +615,8 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     }
 
     // This is the most efficient cutsize of the current FM pass
+    cout << "Final Cut size: "<< lowestCutsize << endl;
+    return lowestCutsize;
     
 }
 
@@ -660,12 +667,19 @@ int main(int argc, char *argv[]) {
         Nodes[i].setPartition(rand() % 2);
     }
 
-    fmpass(&Nodes, &Nets);
+    int cut = -1;
+    int lastCut = -1;
+
+    do{
+        lastCut = cut;
+        cut = fmpass(&Nodes, &Nets);
+        cout << endl << endl;
+    } while (cut < lastCut);
     
 
 
 
     // writeOutput(ofilepath,currentCutsize,Nodes);
     return 0;
-    
+
 }
