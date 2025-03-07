@@ -17,7 +17,7 @@ void generateNodes(int nodes, string filename, int numPins, int npt){
         exit(1); 
     }
     else {
-        nodesFile << "SBU ESE 566 WKK" << endl; 
+        nodesFile << "SBU ESE 566 WKK nodes 1.0" << endl; 
         nodesFile << "NumNodes : " << nodes << endl; 
         nodesFile << "NumTerminals : "<< terminals << endl; 
 
@@ -48,7 +48,7 @@ void generateNets (int nodes, int nets, int pins, int npt, string filename){
         exit(1); 
     }
     else {
-        netFile << "SBU ESE 566 WKK" << endl; 
+        netFile << "SBU ESE 566 WKK nets 1.0" << endl; 
         netFile << "NumNets : " << nets << endl; 
         netFile << "NumPins : "<< pins << endl; 
 
