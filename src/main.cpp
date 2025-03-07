@@ -453,25 +453,73 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
                 Remove the node form the ebucket
                 Place the node in the reclaulted gain bucket
     */
-    int gainSelector = 0;    //0 if left, 1 if right
+    int gainSelector = 0;
+    int lastChosen = 0; //0 means left was the last chosen, 1 means the right was the last chosen.
+    //-1 means this is our first time
 
-    while (leftBucket.size() != 0 && rightBucket.size() != 0) {
-// Choose the side with the largest key
-        if (leftBucket.rbegin()->first - rightBucket.rbegin()->first >= 0) {
-            if (logLevelGlobal > 2) {
-                cout << "Largest key is in left bucket ";
+    while (leftBucket.size() != 0 || rightBucket.size() != 0) {
+        //If this is our first time, choose the side with the largest key
+        if (lastChosen == -1) {
+            // Choose the side with the largest key
+            if (leftBucket.rbegin()->first - rightBucket.rbegin()->first >= 0) {
+                if (logLevelGlobal > 2) {
+                    cout << "Largest key is in left bucket ";
+                }
+                // Left bucket is bigger
+                gainSelector = leftBucket.rbegin()->first;
+                chosenBucket = &leftBucket;
+                lastChosen = 0;
+            } else {
+                // Right bucket is bigger
+                if (logLevelGlobal > 2) {
+                    cout << "Largest key is in right bucket ";
+                }
+                gainSelector = rightBucket.rbegin()->first;
+                chosenBucket = &rightBucket;
+                lastChosen = 1;
             }
-            // Left bucket is bigger
-            gainSelector = leftBucket.rbegin()->first;
-            chosenBucket = &leftBucket;
         } else {
-            // Right bucket is bigger
-            if (logLevelGlobal > 2) {
-                cout << "Largest key is in right bucket ";
+            //This is not our first time.
+            //Choose the side based on the last chosen -- essentially flip it
+            if (lastChosen == 0) {
+                if (logLevelGlobal > 2) {
+                    cout << "Last Chosen was the left. Choosing right" << endl;
+                }
+                //choose the right bucket (As long as it's not empty)
+                lastChosen = 1;
+                if (rightBucket.empty()) {
+                    if (logLevelGlobal > 2) {
+                        cout << "Right bucket was empty, choosing left." << endl;
+                    }
+                    chosenBucket = &leftBucket;
+                    gainSelector = leftBucket.rbegin()->first;
+                } else {
+                    chosenBucket = &rightBucket;
+                    gainSelector = rightBucket.rbegin()->first;
+                }
+            } else {
+                if (logLevelGlobal > 2) {
+                    cout << "Last Chosen was the left. Choosing right" << endl;
+                }
+                //choose the left bucket (As long as it's not empty)
+                lastChosen = 0;
+                if (leftBucket.empty()) {
+                    if (logLevelGlobal > 2) {
+                        cout << "Left bucket was empty, choosing Right." << endl;
+                    }
+                    chosenBucket = &rightBucket;
+                    gainSelector = rightBucket.rbegin()->first;
+                } else {
+                    chosenBucket = &leftBucket;
+                    gainSelector = leftBucket.rbegin()->first;
+                }
+                
             }
-            gainSelector = rightBucket.rbegin()->first;
-            chosenBucket = &rightBucket;
+
         }
+
+        
+
         if (logLevelGlobal > 2) {
 	        cout << "with a gain of: " << gainSelector << endl;
         }
