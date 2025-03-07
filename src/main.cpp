@@ -339,7 +339,7 @@ void removeFromBucket(map<int, linkedlist*>* chosenBucket, int gainSelector, int
     }
 }
 
-void printBuckets(map<int, linkedlist*> leftBucket, map<int, linkedlist*> rightBucket, int selectedNode, vector<Node>* Nodes) {
+void printBuckets(map<int, linkedlist*> leftBucket, map<int, linkedlist*> rightBucket, int selectedNode, vector<Node>* Nodes, vector<timePoint> timeline) {
     if (selectedNode != -1) {
         cout << "move and lock node " << (*Nodes)[selectedNode].getID() << endl;
     }
@@ -348,7 +348,7 @@ void printBuckets(map<int, linkedlist*> leftBucket, map<int, linkedlist*> rightB
     
     cout << "Left Bucket" << endl;
     for (auto i : leftBucket) {
-        cout << "\tGain: " << i.first << "\t";
+        cout << "\tGain: " << i.first << "\t\t";
         linkedlist* dllNode = i.second;
         while (dllNode != nullptr) {
             cout << (*Nodes)[dllNode->getNodeID()].getID() << "->";
@@ -359,7 +359,7 @@ void printBuckets(map<int, linkedlist*> leftBucket, map<int, linkedlist*> rightB
 
     cout << "Right Bucket" << endl;
     for (auto i : rightBucket) {
-        cout << "\tGain: " << i.first << "\t";
+        cout << "\tGain: " << i.first << "\t\t";
         linkedlist* dllNode = i.second;
         while (dllNode != nullptr) {
             cout << (*Nodes)[dllNode->getNodeID()].getID() << "->";
@@ -367,6 +367,12 @@ void printBuckets(map<int, linkedlist*> leftBucket, map<int, linkedlist*> rightB
         }
         cout << endl;
     }
+
+    cout << "Locked Nodes (In order): ";
+    for (auto i : timeline) {
+        cout << (*Nodes)[i.lockedNode].getID() << " ";
+    }
+    cout << endl;
 }
 
 void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
@@ -393,6 +399,7 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
 
     storeInBuckets(&leftBucket, &rightBucket, Nodes, &lBucketSize, &rBucketSize);
     cout << "Left Size: " << lBucketSize << " R Size: " << rBucketSize << endl;
+    printBuckets(leftBucket, rightBucket, -1, Nodes,timeline);
     
     /*
         Hereinlies the FM algorithm
@@ -446,14 +453,14 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
         // }
         // delete dllNode; // Use delete instead of free for C++ objects
 
-        printBuckets(leftBucket, rightBucket, selectedNode, Nodes);
-
         struct timePoint point;
         point.lockedNode = selectedNode;
         point.cutSize = cutsize;
         point.ratio = getAreaRatio(*Nodes); 
         timeline.push_back(point);
         cout <<"cutsize before pass: " << cutsize << endl;
+        printBuckets(leftBucket, rightBucket, selectedNode, Nodes,timeline);
+
 
         bool inc_cutsize, dec_cutsize; // flags that indicate if the cutsize should be incremented or decremented. 
 
@@ -584,8 +591,9 @@ void fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
             if(dec_cutsize){cutsize--;}
         }
         cout<< "cutsize after the pass: " << cutsize << endl; 
-        printBuckets(leftBucket, rightBucket, selectedNode, Nodes);
     }
+
+    printBuckets(leftBucket, rightBucket, -1, Nodes,timeline);
 
     cout << "Buckets are empty" << endl;
 // Here, all cells are now fixed and emptied out of the buckets.
