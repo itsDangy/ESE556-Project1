@@ -1,156 +1,1644 @@
-8
-3
+15
+20
 
-o0 placed in Right Gain of 2 = (2 *2) - 2 No key
-o1 placed in Right Gain of 3 = (2 *2) - 1 No key
-o2 placed in Right Gain of -3 = (2 *0) - 3 No key
-o3 placed in Left  Gain of 3 = (2 *3) - 3 No key
-o4 placed in Left  Gain of 4 = (2 *3) - 2 No key
-o5 placed in Right Gain of -3 = (2 *0) - 3 w/ key
-p0 placed in Right Gain of -3 = (2 *0) - 3 w/ key
-p1 placed in Left  Gain of -2 = (2 *0) - 2 No key
-Left Size: 3 R Size: 5
-Largest key is in left bucket with a gain of: 4
-cutsize before pass: 3
-Removing node[4]: o4 in bucket 1 with gain of 4
+o0 placed in Left  Gain of 6 = (2 *9) - 12 No key
+o1 placed in Right Gain of -11 = (2 *1) - 13 No key
+o2 placed in Right Gain of -13 = (2 *1) - 15 No key
+o3 placed in Right Gain of -12 = (2 *1) - 14 No key
+o4 placed in Right Gain of -13 = (2 *1) - 15 w/ key
+o5 placed in Right Gain of -11 = (2 *1) - 13 w/ key
+o6 placed in Right Gain of -2 = (2 *5) - 12 No key
+o7 placed in Right Gain of -6 = (2 *2) - 10 No key
+o8 placed in Left  Gain of 2 = (2 *7) - 12 No key
+p0 placed in Right Gain of -9 = (2 *1) - 11 No key
+p1 placed in Right Gain of -6 = (2 *3) - 12 w/ key
+p2 placed in Left  Gain of -1 = (2 *8) - 17 No key
+p3 placed in Right Gain of -10 = (2 *1) - 12 No key
+p4 placed in Left  Gain of 8 = (2 *9) - 10 No key
+p5 placed in Left  Gain of -11 = (2 *0) - 11 No key
+Left Size: 5 R Size: 10
+No node selected
+Left Bucket
+	Gain: -11		p5->
+	Gain: -1		p2->
+	Gain: 2		o8->
+	Gain: 6		o0->
+	Gain: 8		p4->
+Right Bucket
+	Gain: -13		o2->o4->
+	Gain: -12		o3->
+	Gain: -11		o1->o5->
+	Gain: -10		p3->
+	Gain: -9		p0->
+	Gain: -6		o7->p1->
+	Gain: -2		o6->
+Locked Nodes (In order): 
+Largest key is in left bucket with a gain of: 8
+cutsize before pass: 20
+Removing node[13]: p4 in bucket 1 with gain of 8
 		Entered removing from bucket
-		Looping until the end looking for 4 in gain 4
+		Looping until the end looking for 13 in gain 8
 		Found the node to delete
 		Grabbed next and prev
 		Set nodeUpdater to null
 		Removing key from bucket
-Starting search for node[3]: o3 with gain of 3 = (2*3) - 3
-		Searching left bucket
+move and lock node p4
+Left Bucket
+	Gain: -11		p5->
+	Gain: -1		p2->
+	Gain: 2		o8->
+	Gain: 6		o0->
+Right Bucket
+	Gain: -13		o2->o4->
+	Gain: -12		o3->
+	Gain: -11		o1->o5->
+	Gain: -10		p3->
+	Gain: -9		p0->
+	Gain: -6		o7->p1->
+	Gain: -2		o6->
+Locked Nodes (In order): p4 
+Starting search for node[3]: o3 with gain of -12 = (2*1) - 14
+		Searching right bucket
 		Removing key from bucket
-		New Gain: 5
-		Key does not exist, creating: 5
+		New Gain: -14
+		Key does not exist, creating: -14
 		3
-Starting search for node[7]: p1 with gain of -2 = (2*0) - 2
-		Searching left bucket
+Starting search for node[9]: p0 with gain of -9 = (2*1) - 11
+		Searching right bucket
 		Removing key from bucket
-		New Gain: 0
-		Key does not exist, creating: 0
+		New Gain: -11
+		Key exists, placed back in bucket with gain: -11
+Starting search for node[7]: o7 with gain of -6 = (2*2) - 10
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -8
+		Key does not exist, creating: -8
 		7
-Starting search for node[1]: o1 with gain of 3 = (2*2) - 1
-		Searching right bucket
-		Removing key from bucket
-		New Gain: 1
-		Key does not exist, creating: 1
-		1
-Starting search for node[2]: o2 with gain of -3 = (2*0) - 3
+Starting search for node[2]: o2 with gain of -13 = (2*1) - 15
 		Searching right bucket
 		Get the next node and move it to the head
-		New Gain: -5
-		Key does not exist, creating: -5
+		New Gain: -15
+		Key does not exist, creating: -15
 		2
-Starting search for node[6]: p0 with gain of -3 = (2*0) - 3
-		Searching right bucket
-		Currently at node[5]: o5
-		This is the last node, set prev to null
-		New Gain: -5
-		Key exists, placed back in bucket with gain: -5
-Starting search for node[5]: o5 with gain of -3 = (2*0) - 3
+Starting search for node[4]: o4 with gain of -13 = (2*1) - 15
 		Searching right bucket
 		Removing key from bucket
-		New Gain: -5
-		Key exists, placed back in bucket with gain: -5
-Starting search for node[0]: o0 with gain of 2 = (2*2) - 2
+		New Gain: -15
+		Key exists, placed back in bucket with gain: -15
+Starting search for node[10]: p1 with gain of -6 = (2*3) - 12
 		Searching right bucket
 		Removing key from bucket
-		New Gain: 0
-		Key does not exist, creating: 0
-		0
-Starting search for node[4]: o4 with gain of 4 = (2*3) - 2
-Starting search for node[2]: o2 with gain of -5 = (2*-1) - 3
-		Searching right bucket
-		Currently at node[5]: o5
-		Currently at node[6]: p0
-		This is the last node, set prev to null
-		New Gain: -7
-		Key does not exist, creating: -7
-		2
-Starting search for node[5]: o5 with gain of -5 = (2*-1) - 3
-		Searching right bucket
-		Get the next node and move it to the head
-		New Gain: -7
-		Key exists, placed back in bucket with gain: -7
-Starting search for node[6]: p0 with gain of -5 = (2*-1) - 3
-		Searching right bucket
-		Removing key from bucket
-		New Gain: -7
-		Key exists, placed back in bucket with gain: -7
-Starting search for node[3]: o3 with gain of 5 = (2*4) - 3
+		New Gain: -8
+		Key exists, placed back in bucket with gain: -8
+Starting search for node[8]: o8 with gain of 2 = (2*7) - 12
 		Searching left bucket
 		Removing key from bucket
-		New Gain: 7
-		Key does not exist, creating: 7
-		3
-Starting search for node[4]: o4 with gain of 4 = (2*3) - 2
-cutsize after the pass: 5
-Largest key is in left bucket with a gain of: 7
-cutsize before pass: 5
-Removing node[3]: o3 in bucket 1 with gain of 7
-		Entered removing from bucket
-		Looping until the end looking for 3 in gain 7
-		Found the node to delete
-		Grabbed next and prev
-		Set nodeUpdater to null
-		Removing key from bucket
-Starting search for node[0]: o0 with gain of 0 = (2*1) - 2
-		Searching right bucket
-		Removing key from bucket
-		New Gain: -2
-		Key does not exist, creating: -2
-		0
-Starting search for node[3]: o3 with gain of 7 = (2*5) - 3
-Starting search for node[3]: o3 with gain of 7 = (2*5) - 3
-Starting search for node[2]: o2 with gain of -7 = (2*-2) - 3
-		Searching right bucket
-		Currently at node[6]: p0
-		Currently at node[5]: o5
-		This is the last node, set prev to null
-		New Gain: -9
-		Key does not exist, creating: -9
-		2
-Starting search for node[5]: o5 with gain of -7 = (2*-2) - 3
-		Searching right bucket
-		Currently at node[6]: p0
-		This is the last node, set prev to null
-		New Gain: -9
-		Key exists, placed back in bucket with gain: -9
-Starting search for node[6]: p0 with gain of -7 = (2*-2) - 3
-		Searching right bucket
-		Removing key from bucket
-		New Gain: -9
-		Key exists, placed back in bucket with gain: -9
-Starting search for node[3]: o3 with gain of 7 = (2*5) - 3
-cutsize after the pass: 5
-Largest key is in right bucket with a gain of: 1
-cutsize before pass: 5
-Removing node[1]: o1 in bucket 0 with gain of 1
-		Entered removing from bucket
-		Looping until the end looking for 1 in gain 1
-		Found the node to delete
-		Grabbed next and prev
-		Set nodeUpdater to null
-		Removing key from bucket
-Starting search for node[3]: o3 with gain of 7 = (2*5) - 3
-cutsize after the pass: 5
-Largest key is in left bucket with a gain of: 0
-cutsize before pass: 5
-Removing node[7]: p1 in bucket 1 with gain of 0
-		Entered removing from bucket
-		Looping until the end looking for 7 in gain 0
-		Found the node to delete
-		Grabbed next and prev
-		Set nodeUpdater to null
-		Removing key from bucket
-Starting search for node[0]: o0 with gain of -2 = (2*0) - 2
+		New Gain: 4
+		Key does not exist, creating: 4
+		8
+Starting search for node[6]: o6 with gain of -2 = (2*5) - 12
 		Searching right bucket
 		Removing key from bucket
 		New Gain: -4
 		Key does not exist, creating: -4
+		6
+Starting search for node[14]: p5 with gain of -11 = (2*0) - 11
+		Searching left bucket
+		Removing key from bucket
+		New Gain: -9
+		Key does not exist, creating: -9
+		14
+Starting search for node[1]: o1 with gain of -11 = (2*1) - 13
+		Searching right bucket
+		Currently at node[9]: p0
+		Found in the middle
+		New Gain: -13
+		Key does not exist, creating: -13
+		1
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[12]: p3 with gain of -10 = (2*1) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -12
+		Key does not exist, creating: -12
+		12
+Starting search for node[3]: o3 with gain of -14 = (2*0) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -16
+		Key does not exist, creating: -16
+		3
+Starting search for node[1]: o1 with gain of -13 = (2*0) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -15
+		Key exists, placed back in bucket with gain: -15
+Starting search for node[10]: p1 with gain of -8 = (2*2) - 12
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -10
+		Key does not exist, creating: -10
+		10
+Starting search for node[2]: o2 with gain of -15 = (2*0) - 15
+		Searching right bucket
+		Currently at node[1]: o1
+		Currently at node[4]: o4
+		This is the last node, set prev to null
+		New Gain: -17
+		Key does not exist, creating: -17
+		2
+Starting search for node[4]: o4 with gain of -15 = (2*0) - 15
+		Searching right bucket
+		Currently at node[1]: o1
+		This is the last node, set prev to null
+		New Gain: -17
+		Key exists, placed back in bucket with gain: -17
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[0]: o0 with gain of 6 = (2*9) - 12
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 8
+		Key does not exist, creating: 8
 		0
-Starting search for node[3]: o3 with gain of 7 = (2*5) - 3
-Starting search for node[3]: o3 with gain of 7 = (2*5) - 3
-cutsize after the pass: 5
+Starting search for node[5]: o5 with gain of -11 = (2*1) - 13
+		Searching right bucket
+		Currently at node[9]: p0
+		This is the last node, set prev to null
+		New Gain: -13
+		Key does not exist, creating: -13
+		5
+Starting search for node[9]: p0 with gain of -11 = (2*0) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -13
+		Key exists, placed back in bucket with gain: -13
+Starting search for node[10]: p1 with gain of -10 = (2*1) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -12
+		Key exists, placed back in bucket with gain: -12
+Starting search for node[6]: o6 with gain of -4 = (2*4) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -6
+		Key does not exist, creating: -6
+		6
+Starting search for node[3]: o3 with gain of -16 = (2*-1) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -18
+		Key does not exist, creating: -18
+		3
+Starting search for node[8]: o8 with gain of 4 = (2*8) - 12
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 6
+		Key does not exist, creating: 6
+		8
+Starting search for node[4]: o4 with gain of -17 = (2*-1) - 15
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -19
+		Key does not exist, creating: -19
+		4
+Starting search for node[1]: o1 with gain of -15 = (2*-1) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -17
+		Key exists, placed back in bucket with gain: -17
+Starting search for node[11]: p2 with gain of -1 = (2*8) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 1
+		Key does not exist, creating: 1
+		11
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[7]: o7 with gain of -8 = (2*1) - 10
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -10
+		Key does not exist, creating: -10
+		7
+Starting search for node[2]: o2 with gain of -17 = (2*-1) - 15
+		Searching right bucket
+		Currently at node[1]: o1
+		This is the last node, set prev to null
+		New Gain: -19
+		Key exists, placed back in bucket with gain: -19
+Starting search for node[8]: o8 with gain of 6 = (2*9) - 12
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 8
+		Key exists, placed back in bucket with gain: 8
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[6]: o6 with gain of -6 = (2*3) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -8
+		Key does not exist, creating: -8
+		6
+Starting search for node[5]: o5 with gain of -13 = (2*0) - 13
+		Searching right bucket
+		Currently at node[9]: p0
+		This is the last node, set prev to null
+		New Gain: -15
+		Key does not exist, creating: -15
+		5
+Starting search for node[14]: p5 with gain of -9 = (2*1) - 11
+		Searching left bucket
+		Removing key from bucket
+		New Gain: -7
+		Key does not exist, creating: -7
+		14
+Starting search for node[4]: o4 with gain of -19 = (2*-2) - 15
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -21
+		Key does not exist, creating: -21
+		4
+Starting search for node[11]: p2 with gain of 1 = (2*9) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 3
+		Key does not exist, creating: 3
+		11
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[5]: o5 with gain of -15 = (2*-1) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -17
+		Key exists, placed back in bucket with gain: -17
+Starting search for node[2]: o2 with gain of -19 = (2*-2) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -21
+		Key exists, placed back in bucket with gain: -21
+Starting search for node[3]: o3 with gain of -18 = (2*-2) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -20
+		Key does not exist, creating: -20
+		3
+Starting search for node[4]: o4 with gain of -21 = (2*-3) - 15
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -23
+		Key does not exist, creating: -23
+		4
+Starting search for node[11]: p2 with gain of 3 = (2*10) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 5
+		Key does not exist, creating: 5
+		11
+Starting search for node[6]: o6 with gain of -8 = (2*2) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -10
+		Key exists, placed back in bucket with gain: -10
+Starting search for node[9]: p0 with gain of -13 = (2*-1) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -15
+		Key does not exist, creating: -15
+		9
+Starting search for node[0]: o0 with gain of 8 = (2*10) - 12
+		Searching left bucket
+		Currently at node[8]: o8
+		This is the last node, set prev to null
+		New Gain: 10
+		Key does not exist, creating: 10
+		0
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[5]: o5 with gain of -17 = (2*-2) - 13
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -19
+		Key does not exist, creating: -19
+		5
+Starting search for node[9]: p0 with gain of -15 = (2*-2) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -17
+		Key exists, placed back in bucket with gain: -17
+Starting search for node[1]: o1 with gain of -17 = (2*-2) - 13
+		Searching right bucket
+		Currently at node[9]: p0
+		This is the last node, set prev to null
+		New Gain: -19
+		Key exists, placed back in bucket with gain: -19
+Starting search for node[11]: p2 with gain of 5 = (2*11) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 7
+		Key does not exist, creating: 7
+		11
+Starting search for node[8]: o8 with gain of 8 = (2*10) - 12
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 10
+		Key exists, placed back in bucket with gain: 10
+Starting search for node[10]: p1 with gain of -12 = (2*0) - 12
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -14
+		Key does not exist, creating: -14
+		10
+Starting search for node[0]: o0 with gain of 10 = (2*11) - 12
+		Searching left bucket
+		Currently at node[8]: o8
+		This is the last node, set prev to null
+		New Gain: 12
+		Key does not exist, creating: 12
+		0
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[2]: o2 with gain of -21 = (2*-3) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -23
+		Key exists, placed back in bucket with gain: -23
+Starting search for node[5]: o5 with gain of -19 = (2*-3) - 13
+		Searching right bucket
+		Currently at node[1]: o1
+		This is the last node, set prev to null
+		New Gain: -21
+		Key does not exist, creating: -21
+		5
+Starting search for node[8]: o8 with gain of 10 = (2*11) - 12
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 12
+		Key exists, placed back in bucket with gain: 12
+Starting search for node[6]: o6 with gain of -10 = (2*1) - 12
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -12
+		Key exists, placed back in bucket with gain: -12
+Starting search for node[1]: o1 with gain of -19 = (2*-3) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -21
+		Key exists, placed back in bucket with gain: -21
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[14]: p5 with gain of -7 = (2*2) - 11
+		Searching left bucket
+		Removing key from bucket
+		New Gain: -5
+		Key does not exist, creating: -5
+		14
+Starting search for node[12]: p3 with gain of -12 = (2*0) - 12
+		Searching right bucket
+		Currently at node[6]: o6
+		This is the last node, set prev to null
+		New Gain: -14
+		Key exists, placed back in bucket with gain: -14
+Starting search for node[9]: p0 with gain of -17 = (2*-3) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -19
+		Key does not exist, creating: -19
+		9
+Starting search for node[3]: o3 with gain of -20 = (2*-3) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -22
+		Key does not exist, creating: -22
+		3
+Starting search for node[5]: o5 with gain of -21 = (2*-4) - 13
+		Searching right bucket
+		Currently at node[1]: o1
+		This is the last node, set prev to null
+		New Gain: -23
+		Key exists, placed back in bucket with gain: -23
+Starting search for node[1]: o1 with gain of -21 = (2*-4) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -23
+		Key exists, placed back in bucket with gain: -23
+Starting search for node[4]: o4 with gain of -23 = (2*-4) - 15
+		Searching right bucket
+		Currently at node[1]: o1
+		Currently at node[5]: o5
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -25
+		Key does not exist, creating: -25
+		4
+Starting search for node[2]: o2 with gain of -23 = (2*-4) - 15
+		Searching right bucket
+		Currently at node[1]: o1
+		Currently at node[5]: o5
+		This is the last node, set prev to null
+		New Gain: -25
+		Key exists, placed back in bucket with gain: -25
+Starting search for node[8]: o8 with gain of 12 = (2*12) - 12
+		Searching left bucket
+		Get the next node and move it to the head
+		New Gain: 14
+		Key does not exist, creating: 14
+		8
+Starting search for node[7]: o7 with gain of -10 = (2*0) - 10
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -12
+		Key exists, placed back in bucket with gain: -12
+Starting search for node[11]: p2 with gain of 7 = (2*12) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 9
+		Key does not exist, creating: 9
+		11
+Starting search for node[10]: p1 with gain of -14 = (2*-1) - 12
+		Searching right bucket
+		Currently at node[12]: p3
+		This is the last node, set prev to null
+		New Gain: -16
+		Key does not exist, creating: -16
+		10
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+cutsize after the pass: 20
+Largest key is in left bucket with a gain of: 14
+cutsize before pass: 20
+Removing node[8]: o8 in bucket 1 with gain of 14
+		Entered removing from bucket
+		Looping until the end looking for 8 in gain 14
+		Found the node to delete
+		Grabbed next and prev
+		Set nodeUpdater to null
+		Removing key from bucket
+move and lock node o8
+Left Bucket
+	Gain: -5		p5->
+	Gain: 9		p2->
+	Gain: 12		o0->
+Right Bucket
+	Gain: -25		o2->o4->
+	Gain: -23		o1->o5->
+	Gain: -22		o3->
+	Gain: -19		p0->
+	Gain: -16		p1->
+	Gain: -14		p3->
+	Gain: -12		o7->o6->
+Locked Nodes (In order): p4 o8 
+Starting search for node[3]: o3 with gain of -22 = (2*-4) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -24
+		Key does not exist, creating: -24
+		3
+Starting search for node[9]: p0 with gain of -19 = (2*-4) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -21
+		Key does not exist, creating: -21
+		9
+Starting search for node[7]: o7 with gain of -12 = (2*-1) - 10
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -14
+		Key exists, placed back in bucket with gain: -14
+Starting search for node[2]: o2 with gain of -25 = (2*-5) - 15
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -27
+		Key does not exist, creating: -27
+		2
+Starting search for node[4]: o4 with gain of -25 = (2*-5) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -27
+		Key exists, placed back in bucket with gain: -27
+Starting search for node[10]: p1 with gain of -16 = (2*-2) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -18
+		Key does not exist, creating: -18
+		10
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[0]: o0 with gain of 12 = (2*12) - 12
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 14
+		Key does not exist, creating: 14
+		0
+Starting search for node[5]: o5 with gain of -23 = (2*-5) - 13
+		Searching right bucket
+		Currently at node[1]: o1
+		This is the last node, set prev to null
+		New Gain: -25
+		Key does not exist, creating: -25
+		5
+Starting search for node[9]: p0 with gain of -21 = (2*-5) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -23
+		Key exists, placed back in bucket with gain: -23
+Starting search for node[10]: p1 with gain of -18 = (2*-3) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -20
+		Key does not exist, creating: -20
+		10
+Starting search for node[6]: o6 with gain of -12 = (2*0) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -14
+		Key exists, placed back in bucket with gain: -14
+Starting search for node[3]: o3 with gain of -24 = (2*-5) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -26
+		Key does not exist, creating: -26
+		3
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[11]: p2 with gain of 9 = (2*13) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 11
+		Key does not exist, creating: 11
+		11
+Starting search for node[3]: o3 with gain of -26 = (2*-6) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -28
+		Key does not exist, creating: -28
+		3
+Starting search for node[5]: o5 with gain of -25 = (2*-6) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -27
+		Key exists, placed back in bucket with gain: -27
+Starting search for node[4]: o4 with gain of -27 = (2*-6) - 15
+		Searching right bucket
+		Currently at node[5]: o5
+		Found in the middle
+		New Gain: -29
+		Key does not exist, creating: -29
+		4
+Starting search for node[9]: p0 with gain of -23 = (2*-6) - 11
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -25
+		Key does not exist, creating: -25
+		9
+Starting search for node[0]: o0 with gain of 14 = (2*13) - 12
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 16
+		Key does not exist, creating: 16
+		0
+Starting search for node[12]: p3 with gain of -14 = (2*-1) - 12
+		Searching right bucket
+		Currently at node[6]: o6
+		Currently at node[7]: o7
+		This is the last node, set prev to null
+		New Gain: -16
+		Key does not exist, creating: -16
+		12
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[5]: o5 with gain of -27 = (2*-7) - 13
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -29
+		Key exists, placed back in bucket with gain: -29
+Starting search for node[14]: p5 with gain of -5 = (2*3) - 11
+		Searching left bucket
+		Removing key from bucket
+		New Gain: -3
+		Key does not exist, creating: -3
+		14
+Starting search for node[4]: o4 with gain of -29 = (2*-7) - 15
+		Searching right bucket
+		Currently at node[5]: o5
+		This is the last node, set prev to null
+		New Gain: -31
+		Key does not exist, creating: -31
+		4
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[0]: o0 with gain of 16 = (2*14) - 12
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 18
+		Key does not exist, creating: 18
+		0
+Starting search for node[11]: p2 with gain of 11 = (2*14) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 13
+		Key does not exist, creating: 13
+		11
+Starting search for node[12]: p3 with gain of -16 = (2*-2) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -18
+		Key does not exist, creating: -18
+		12
+Starting search for node[5]: o5 with gain of -29 = (2*-8) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -31
+		Key exists, placed back in bucket with gain: -31
+Starting search for node[10]: p1 with gain of -20 = (2*-4) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -22
+		Key does not exist, creating: -22
+		10
+Starting search for node[14]: p5 with gain of -3 = (2*4) - 11
+		Searching left bucket
+		Removing key from bucket
+		New Gain: -1
+		Key does not exist, creating: -1
+		14
+Starting search for node[9]: p0 with gain of -25 = (2*-7) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -27
+		Key exists, placed back in bucket with gain: -27
+Starting search for node[2]: o2 with gain of -27 = (2*-6) - 15
+		Searching right bucket
+		Currently at node[9]: p0
+		This is the last node, set prev to null
+		New Gain: -29
+		Key does not exist, creating: -29
+		2
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[6]: o6 with gain of -14 = (2*-1) - 12
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -16
+		Key does not exist, creating: -16
+		6
+Starting search for node[2]: o2 with gain of -29 = (2*-7) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -31
+		Key exists, placed back in bucket with gain: -31
+Starting search for node[5]: o5 with gain of -31 = (2*-9) - 13
+		Searching right bucket
+		Currently at node[2]: o2
+		Found in the middle
+		New Gain: -33
+		Key does not exist, creating: -33
+		5
+Starting search for node[1]: o1 with gain of -23 = (2*-5) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -25
+		Key does not exist, creating: -25
+		1
+Starting search for node[11]: p2 with gain of 13 = (2*15) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 15
+		Key does not exist, creating: 15
+		11
+Starting search for node[14]: p5 with gain of -1 = (2*5) - 11
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 1
+		Key does not exist, creating: 1
+		14
+Starting search for node[10]: p1 with gain of -22 = (2*-5) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -24
+		Key does not exist, creating: -24
+		10
+Starting search for node[3]: o3 with gain of -28 = (2*-7) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -30
+		Key does not exist, creating: -30
+		3
+Starting search for node[9]: p0 with gain of -27 = (2*-8) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -29
+		Key does not exist, creating: -29
+		9
+Starting search for node[4]: o4 with gain of -31 = (2*-8) - 15
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -33
+		Key exists, placed back in bucket with gain: -33
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[7]: o7 with gain of -14 = (2*-2) - 10
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -16
+		Key exists, placed back in bucket with gain: -16
+Starting search for node[2]: o2 with gain of -31 = (2*-8) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -33
+		Key exists, placed back in bucket with gain: -33
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[5]: o5 with gain of -33 = (2*-10) - 13
+		Searching right bucket
+		Currently at node[2]: o2
+		Currently at node[4]: o4
+		This is the last node, set prev to null
+		New Gain: -35
+		Key does not exist, creating: -35
+		5
+Starting search for node[2]: o2 with gain of -33 = (2*-9) - 15
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -35
+		Key exists, placed back in bucket with gain: -35
+Starting search for node[3]: o3 with gain of -30 = (2*-8) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -32
+		Key does not exist, creating: -32
+		3
+Starting search for node[4]: o4 with gain of -33 = (2*-9) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -35
+		Key exists, placed back in bucket with gain: -35
+Starting search for node[11]: p2 with gain of 15 = (2*16) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 17
+		Key does not exist, creating: 17
+		11
+Starting search for node[6]: o6 with gain of -16 = (2*-2) - 12
+		Searching right bucket
+		Currently at node[7]: o7
+		This is the last node, set prev to null
+		New Gain: -18
+		Key exists, placed back in bucket with gain: -18
+Starting search for node[9]: p0 with gain of -29 = (2*-9) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -31
+		Key does not exist, creating: -31
+		9
+Starting search for node[0]: o0 with gain of 18 = (2*15) - 12
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 20
+		Key does not exist, creating: 20
+		0
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[5]: o5 with gain of -35 = (2*-11) - 13
+		Searching right bucket
+		Currently at node[4]: o4
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -37
+		Key does not exist, creating: -37
+		5
+Starting search for node[9]: p0 with gain of -31 = (2*-10) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -33
+		Key does not exist, creating: -33
+		9
+Starting search for node[1]: o1 with gain of -25 = (2*-6) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -27
+		Key does not exist, creating: -27
+		1
+Starting search for node[11]: p2 with gain of 17 = (2*17) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 19
+		Key does not exist, creating: 19
+		11
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[2]: o2 with gain of -35 = (2*-10) - 15
+		Searching right bucket
+		Currently at node[4]: o4
+		This is the last node, set prev to null
+		New Gain: -37
+		Key exists, placed back in bucket with gain: -37
+Starting search for node[5]: o5 with gain of -37 = (2*-12) - 13
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -39
+		Key does not exist, creating: -39
+		5
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[14]: p5 with gain of 1 = (2*6) - 11
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 3
+		Key does not exist, creating: 3
+		14
+Starting search for node[12]: p3 with gain of -18 = (2*-3) - 12
+		Searching right bucket
+		Currently at node[6]: o6
+		This is the last node, set prev to null
+		New Gain: -20
+		Key does not exist, creating: -20
+		12
+Starting search for node[9]: p0 with gain of -33 = (2*-11) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -35
+		Key exists, placed back in bucket with gain: -35
+Starting search for node[3]: o3 with gain of -32 = (2*-9) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -34
+		Key does not exist, creating: -34
+		3
+Starting search for node[5]: o5 with gain of -39 = (2*-13) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -41
+		Key does not exist, creating: -41
+		5
+Starting search for node[1]: o1 with gain of -27 = (2*-7) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -29
+		Key does not exist, creating: -29
+		1
+Starting search for node[4]: o4 with gain of -35 = (2*-10) - 15
+		Searching right bucket
+		Currently at node[9]: p0
+		This is the last node, set prev to null
+		New Gain: -37
+		Key exists, placed back in bucket with gain: -37
+Starting search for node[2]: o2 with gain of -37 = (2*-11) - 15
+		Searching right bucket
+		Currently at node[4]: o4
+		This is the last node, set prev to null
+		New Gain: -39
+		Key does not exist, creating: -39
+		2
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+cutsize after the pass: 20
+Largest key is in left bucket with a gain of: 20
+cutsize before pass: 20
+Removing node[0]: o0 in bucket 1 with gain of 20
+		Entered removing from bucket
+		Looping until the end looking for 0 in gain 20
+		Found the node to delete
+		Grabbed next and prev
+		Set nodeUpdater to null
+		Removing key from bucket
+move and lock node o0
+Left Bucket
+	Gain: 3		p5->
+	Gain: 19		p2->
+Right Bucket
+	Gain: -41		o5->
+	Gain: -39		o2->
+	Gain: -37		o4->
+	Gain: -35		p0->
+	Gain: -34		o3->
+	Gain: -29		o1->
+	Gain: -24		p1->
+	Gain: -20		p3->
+	Gain: -18		o6->
+	Gain: -16		o7->
+Locked Nodes (In order): p4 o8 o0 
+Starting search for node[0]: o0 with gain of 20 = (2*16) - 12
+Starting search for node[11]: p2 with gain of 19 = (2*18) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 21
+		Key does not exist, creating: 21
+		11
+Starting search for node[3]: o3 with gain of -34 = (2*-10) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -36
+		Key does not exist, creating: -36
+		3
+Starting search for node[5]: o5 with gain of -41 = (2*-14) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -43
+		Key does not exist, creating: -43
+		5
+Starting search for node[4]: o4 with gain of -37 = (2*-11) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -39
+		Key exists, placed back in bucket with gain: -39
+Starting search for node[9]: p0 with gain of -35 = (2*-12) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -37
+		Key does not exist, creating: -37
+		9
+Starting search for node[0]: o0 with gain of 20 = (2*16) - 12
+Starting search for node[12]: p3 with gain of -20 = (2*-4) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -22
+		Key does not exist, creating: -22
+		12
+Starting search for node[1]: o1 with gain of -29 = (2*-8) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -31
+		Key does not exist, creating: -31
+		1
+Starting search for node[0]: o0 with gain of 20 = (2*16) - 12
+Starting search for node[2]: o2 with gain of -39 = (2*-12) - 15
+		Searching right bucket
+		Currently at node[4]: o4
+		This is the last node, set prev to null
+		New Gain: -41
+		Key does not exist, creating: -41
+		2
+Starting search for node[0]: o0 with gain of 20 = (2*16) - 12
+Starting search for node[0]: o0 with gain of 20 = (2*16) - 12
+Starting search for node[6]: o6 with gain of -18 = (2*-3) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -20
+		Key does not exist, creating: -20
+		6
+Starting search for node[2]: o2 with gain of -41 = (2*-13) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -43
+		Key exists, placed back in bucket with gain: -43
+Starting search for node[5]: o5 with gain of -43 = (2*-15) - 13
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -45
+		Key does not exist, creating: -45
+		5
+Starting search for node[1]: o1 with gain of -31 = (2*-9) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -33
+		Key does not exist, creating: -33
+		1
+Starting search for node[11]: p2 with gain of 21 = (2*19) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 23
+		Key does not exist, creating: 23
+		11
+Starting search for node[14]: p5 with gain of 3 = (2*7) - 11
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 5
+		Key does not exist, creating: 5
+		14
+Starting search for node[10]: p1 with gain of -24 = (2*-6) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -26
+		Key does not exist, creating: -26
+		10
+Starting search for node[3]: o3 with gain of -36 = (2*-11) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -38
+		Key does not exist, creating: -38
+		3
+Starting search for node[9]: p0 with gain of -37 = (2*-13) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -39
+		Key exists, placed back in bucket with gain: -39
+Starting search for node[4]: o4 with gain of -39 = (2*-12) - 15
+		Searching right bucket
+		Currently at node[9]: p0
+		This is the last node, set prev to null
+		New Gain: -41
+		Key does not exist, creating: -41
+		4
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[7]: o7 with gain of -16 = (2*-3) - 10
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -18
+		Key does not exist, creating: -18
+		7
+Starting search for node[2]: o2 with gain of -43 = (2*-14) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -45
+		Key exists, placed back in bucket with gain: -45
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[5]: o5 with gain of -45 = (2*-16) - 13
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -47
+		Key does not exist, creating: -47
+		5
+Starting search for node[2]: o2 with gain of -45 = (2*-15) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -47
+		Key exists, placed back in bucket with gain: -47
+Starting search for node[3]: o3 with gain of -38 = (2*-12) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -40
+		Key does not exist, creating: -40
+		3
+Starting search for node[4]: o4 with gain of -41 = (2*-13) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -43
+		Key does not exist, creating: -43
+		4
+Starting search for node[11]: p2 with gain of 23 = (2*20) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 25
+		Key does not exist, creating: 25
+		11
+Starting search for node[6]: o6 with gain of -20 = (2*-4) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -22
+		Key exists, placed back in bucket with gain: -22
+Starting search for node[9]: p0 with gain of -39 = (2*-14) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -41
+		Key does not exist, creating: -41
+		9
+Starting search for node[0]: o0 with gain of 20 = (2*16) - 12
+Starting search for node[5]: o5 with gain of -47 = (2*-17) - 13
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -49
+		Key does not exist, creating: -49
+		5
+Starting search for node[9]: p0 with gain of -41 = (2*-15) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -43
+		Key exists, placed back in bucket with gain: -43
+Starting search for node[1]: o1 with gain of -33 = (2*-10) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -35
+		Key does not exist, creating: -35
+		1
+Starting search for node[11]: p2 with gain of 25 = (2*21) - 17
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 27
+		Key does not exist, creating: 27
+		11
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[2]: o2 with gain of -47 = (2*-16) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -49
+		Key exists, placed back in bucket with gain: -49
+Starting search for node[5]: o5 with gain of -49 = (2*-18) - 13
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -51
+		Key does not exist, creating: -51
+		5
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[14]: p5 with gain of 5 = (2*8) - 11
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 7
+		Key does not exist, creating: 7
+		14
+Starting search for node[12]: p3 with gain of -22 = (2*-5) - 12
+		Searching right bucket
+		Currently at node[6]: o6
+		This is the last node, set prev to null
+		New Gain: -24
+		Key does not exist, creating: -24
+		12
+Starting search for node[9]: p0 with gain of -43 = (2*-16) - 11
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -45
+		Key does not exist, creating: -45
+		9
+Starting search for node[3]: o3 with gain of -40 = (2*-13) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -42
+		Key does not exist, creating: -42
+		3
+Starting search for node[5]: o5 with gain of -51 = (2*-19) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -53
+		Key does not exist, creating: -53
+		5
+Starting search for node[1]: o1 with gain of -35 = (2*-11) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -37
+		Key does not exist, creating: -37
+		1
+Starting search for node[4]: o4 with gain of -43 = (2*-14) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -45
+		Key exists, placed back in bucket with gain: -45
+Starting search for node[2]: o2 with gain of -49 = (2*-17) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -51
+		Key does not exist, creating: -51
+		2
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+cutsize after the pass: 20
+Largest key is in left bucket with a gain of: 27
+cutsize before pass: 20
+Removing node[11]: p2 in bucket 1 with gain of 27
+		Entered removing from bucket
+		Looping until the end looking for 11 in gain 27
+		Found the node to delete
+		Grabbed next and prev
+		Set nodeUpdater to null
+		Removing key from bucket
+move and lock node p2
+Left Bucket
+	Gain: 7		p5->
+Right Bucket
+	Gain: -53		o5->
+	Gain: -51		o2->
+	Gain: -45		o4->p0->
+	Gain: -42		o3->
+	Gain: -37		o1->
+	Gain: -26		p1->
+	Gain: -24		p3->
+	Gain: -22		o6->
+	Gain: -18		o7->
+Locked Nodes (In order): p4 o8 o0 p2 
+Starting search for node[0]: o0 with gain of 20 = (2*16) - 12
+Starting search for node[11]: p2 with gain of 27 = (2*22) - 17
+Starting search for node[12]: p3 with gain of -24 = (2*-6) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -26
+		Key exists, placed back in bucket with gain: -26
+Starting search for node[1]: o1 with gain of -37 = (2*-12) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -39
+		Key does not exist, creating: -39
+		1
+Starting search for node[0]: o0 with gain of 20 = (2*16) - 12
+Starting search for node[2]: o2 with gain of -51 = (2*-18) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -53
+		Key exists, placed back in bucket with gain: -53
+Starting search for node[0]: o0 with gain of 20 = (2*16) - 12
+Starting search for node[4]: o4 with gain of -45 = (2*-15) - 15
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -47
+		Key does not exist, creating: -47
+		4
+Starting search for node[1]: o1 with gain of -39 = (2*-13) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -41
+		Key does not exist, creating: -41
+		1
+Starting search for node[10]: p1 with gain of -26 = (2*-7) - 12
+		Searching right bucket
+		Currently at node[12]: p3
+		This is the last node, set prev to null
+		New Gain: -28
+		Key does not exist, creating: -28
+		10
+Starting search for node[12]: p3 with gain of -26 = (2*-7) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -28
+		Key exists, placed back in bucket with gain: -28
+Starting search for node[11]: p2 with gain of 27 = (2*22) - 17
+Starting search for node[5]: o5 with gain of -53 = (2*-20) - 13
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -55
+		Key does not exist, creating: -55
+		5
+Starting search for node[14]: p5 with gain of 7 = (2*9) - 11
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 9
+		Key does not exist, creating: 9
+		14
+Starting search for node[4]: o4 with gain of -47 = (2*-16) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -49
+		Key does not exist, creating: -49
+		4
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[2]: o2 with gain of -53 = (2*-19) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -55
+		Key exists, placed back in bucket with gain: -55
+Starting search for node[1]: o1 with gain of -41 = (2*-14) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -43
+		Key does not exist, creating: -43
+		1
+Starting search for node[11]: p2 with gain of 27 = (2*22) - 17
+Starting search for node[0]: o0 with gain of 20 = (2*16) - 12
+Starting search for node[6]: o6 with gain of -22 = (2*-5) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -24
+		Key does not exist, creating: -24
+		6
+Starting search for node[2]: o2 with gain of -55 = (2*-20) - 15
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -57
+		Key does not exist, creating: -57
+		2
+Starting search for node[5]: o5 with gain of -55 = (2*-21) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -57
+		Key exists, placed back in bucket with gain: -57
+Starting search for node[1]: o1 with gain of -43 = (2*-15) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -45
+		Key exists, placed back in bucket with gain: -45
+Starting search for node[11]: p2 with gain of 27 = (2*22) - 17
+Starting search for node[7]: o7 with gain of -18 = (2*-4) - 10
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -20
+		Key does not exist, creating: -20
+		7
+Starting search for node[2]: o2 with gain of -57 = (2*-21) - 15
+		Searching right bucket
+		Currently at node[5]: o5
+		This is the last node, set prev to null
+		New Gain: -59
+		Key does not exist, creating: -59
+		2
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[6]: o6 with gain of -24 = (2*-6) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -26
+		Key does not exist, creating: -26
+		6
+Starting search for node[5]: o5 with gain of -57 = (2*-22) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -59
+		Key exists, placed back in bucket with gain: -59
+Starting search for node[14]: p5 with gain of 9 = (2*10) - 11
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 11
+		Key does not exist, creating: 11
+		14
+Starting search for node[4]: o4 with gain of -49 = (2*-17) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -51
+		Key does not exist, creating: -51
+		4
+Starting search for node[11]: p2 with gain of 27 = (2*22) - 17
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[4]: o4 with gain of -51 = (2*-18) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -53
+		Key does not exist, creating: -53
+		4
+Starting search for node[12]: p3 with gain of -28 = (2*-8) - 12
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -30
+		Key does not exist, creating: -30
+		12
+Starting search for node[9]: p0 with gain of -45 = (2*-17) - 11
+		Searching right bucket
+		Currently at node[1]: o1
+		This is the last node, set prev to null
+		New Gain: -47
+		Key does not exist, creating: -47
+		9
+Starting search for node[6]: o6 with gain of -26 = (2*-7) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -28
+		Key exists, placed back in bucket with gain: -28
+Starting search for node[11]: p2 with gain of 27 = (2*22) - 17
+Starting search for node[5]: o5 with gain of -59 = (2*-23) - 13
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -61
+		Key does not exist, creating: -61
+		5
+Starting search for node[2]: o2 with gain of -59 = (2*-22) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -61
+		Key exists, placed back in bucket with gain: -61
+Starting search for node[3]: o3 with gain of -42 = (2*-14) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -44
+		Key does not exist, creating: -44
+		3
+Starting search for node[4]: o4 with gain of -53 = (2*-19) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -55
+		Key does not exist, creating: -55
+		4
+Starting search for node[11]: p2 with gain of 27 = (2*22) - 17
+Starting search for node[5]: o5 with gain of -61 = (2*-24) - 13
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -63
+		Key does not exist, creating: -63
+		5
+Starting search for node[9]: p0 with gain of -47 = (2*-18) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -49
+		Key does not exist, creating: -49
+		9
+Starting search for node[1]: o1 with gain of -45 = (2*-16) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -47
+		Key does not exist, creating: -47
+		1
+Starting search for node[11]: p2 with gain of 27 = (2*22) - 17
+Starting search for node[2]: o2 with gain of -61 = (2*-23) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -63
+		Key exists, placed back in bucket with gain: -63
+Starting search for node[5]: o5 with gain of -63 = (2*-25) - 13
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -65
+		Key does not exist, creating: -65
+		5
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[14]: p5 with gain of 11 = (2*11) - 11
+		Searching left bucket
+		Removing key from bucket
+		New Gain: 13
+		Key does not exist, creating: 13
+		14
+Starting search for node[12]: p3 with gain of -30 = (2*-9) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -32
+		Key does not exist, creating: -32
+		12
+Starting search for node[9]: p0 with gain of -49 = (2*-19) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -51
+		Key does not exist, creating: -51
+		9
+Starting search for node[3]: o3 with gain of -44 = (2*-15) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -46
+		Key does not exist, creating: -46
+		3
+Starting search for node[5]: o5 with gain of -65 = (2*-26) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -67
+		Key does not exist, creating: -67
+		5
+Starting search for node[1]: o1 with gain of -47 = (2*-17) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -49
+		Key does not exist, creating: -49
+		1
+Starting search for node[4]: o4 with gain of -55 = (2*-20) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -57
+		Key does not exist, creating: -57
+		4
+Starting search for node[2]: o2 with gain of -63 = (2*-24) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -65
+		Key does not exist, creating: -65
+		2
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+cutsize after the pass: 20
+Largest key is in left bucket with a gain of: 13
+cutsize before pass: 20
+Removing node[14]: p5 in bucket 1 with gain of 13
+		Entered removing from bucket
+		Looping until the end looking for 14 in gain 13
+		Found the node to delete
+		Grabbed next and prev
+		Set nodeUpdater to null
+		Removing key from bucket
+move and lock node p5
+Left Bucket
+Right Bucket
+	Gain: -67		o5->
+	Gain: -65		o2->
+	Gain: -57		o4->
+	Gain: -51		p0->
+	Gain: -49		o1->
+	Gain: -46		o3->
+	Gain: -32		p3->
+	Gain: -28		o6->p1->
+	Gain: -20		o7->
+Locked Nodes (In order): p4 o8 o0 p2 p5 
+Starting search for node[3]: o3 with gain of -46 = (2*-16) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -48
+		Key does not exist, creating: -48
+		3
+Starting search for node[9]: p0 with gain of -51 = (2*-20) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -53
+		Key does not exist, creating: -53
+		9
+Starting search for node[7]: o7 with gain of -20 = (2*-5) - 10
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -22
+		Key does not exist, creating: -22
+		7
+Starting search for node[2]: o2 with gain of -65 = (2*-25) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -67
+		Key exists, placed back in bucket with gain: -67
+Starting search for node[4]: o4 with gain of -57 = (2*-21) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -59
+		Key does not exist, creating: -59
+		4
+Starting search for node[10]: p1 with gain of -28 = (2*-8) - 12
+		Searching right bucket
+		Currently at node[6]: o6
+		This is the last node, set prev to null
+		New Gain: -30
+		Key does not exist, creating: -30
+		10
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[11]: p2 with gain of 27 = (2*22) - 17
+Starting search for node[5]: o5 with gain of -67 = (2*-27) - 13
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -69
+		Key does not exist, creating: -69
+		5
+Starting search for node[14]: p5 with gain of 13 = (2*12) - 11
+Starting search for node[0]: o0 with gain of 20 = (2*16) - 12
+Starting search for node[6]: o6 with gain of -28 = (2*-8) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -30
+		Key exists, placed back in bucket with gain: -30
+Starting search for node[2]: o2 with gain of -67 = (2*-26) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -69
+		Key exists, placed back in bucket with gain: -69
+Starting search for node[5]: o5 with gain of -69 = (2*-28) - 13
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -71
+		Key does not exist, creating: -71
+		5
+Starting search for node[1]: o1 with gain of -49 = (2*-18) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -51
+		Key does not exist, creating: -51
+		1
+Starting search for node[11]: p2 with gain of 27 = (2*22) - 17
+Starting search for node[7]: o7 with gain of -22 = (2*-6) - 10
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -24
+		Key does not exist, creating: -24
+		7
+Starting search for node[2]: o2 with gain of -69 = (2*-27) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -71
+		Key exists, placed back in bucket with gain: -71
+Starting search for node[8]: o8 with gain of 14 = (2*13) - 12
+Starting search for node[6]: o6 with gain of -30 = (2*-9) - 12
+		Searching right bucket
+		Get the next node and move it to the head
+		New Gain: -32
+		Key exists, placed back in bucket with gain: -32
+Starting search for node[5]: o5 with gain of -71 = (2*-29) - 13
+		Searching right bucket
+		Currently at node[2]: o2
+		This is the last node, set prev to null
+		New Gain: -73
+		Key does not exist, creating: -73
+		5
+Starting search for node[14]: p5 with gain of 13 = (2*12) - 11
+Starting search for node[13]: p4 with gain of 8 = (2*9) - 10
+Starting search for node[4]: o4 with gain of -59 = (2*-22) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -61
+		Key does not exist, creating: -61
+		4
+Starting search for node[12]: p3 with gain of -32 = (2*-10) - 12
+		Searching right bucket
+		Currently at node[6]: o6
+		This is the last node, set prev to null
+		New Gain: -34
+		Key does not exist, creating: -34
+		12
+Starting search for node[9]: p0 with gain of -53 = (2*-21) - 11
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -55
+		Key does not exist, creating: -55
+		9
+Starting search for node[6]: o6 with gain of -32 = (2*-10) - 12
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -34
+		Key exists, placed back in bucket with gain: -34
+Starting search for node[11]: p2 with gain of 27 = (2*22) - 17
+Starting search for node[5]: o5 with gain of -73 = (2*-30) - 13
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -75
+		Key does not exist, creating: -75
+		5
+Starting search for node[2]: o2 with gain of -71 = (2*-28) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -73
+		Key does not exist, creating: -73
+		2
+Starting search for node[3]: o3 with gain of -48 = (2*-17) - 14
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -50
+		Key does not exist, creating: -50
+		3
+Starting search for node[4]: o4 with gain of -61 = (2*-23) - 15
+		Searching right bucket
+		Removing key from bucket
+		New Gain: -63
+		Key does not exist, creating: -63
+		4
+Starting search for node[11]: p2 with gain of 27 = (2*22) - 17
+Starting search for node[14]: p5 with gain of 13 = (2*12) - 11
+cutsize after the pass: 20
+No node selected
+Left Bucket
+Right Bucket
+	Gain: -75		o5->
+	Gain: -73		o2->
+	Gain: -63		o4->
+	Gain: -55		p0->
+	Gain: -51		o1->
+	Gain: -50		o3->
+	Gain: -34		o6->p3->
+	Gain: -30		p1->
+	Gain: -24		o7->
+Locked Nodes (In order): p4 o8 o0 p2 p5 
+Buckets are empty
