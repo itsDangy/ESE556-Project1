@@ -7,6 +7,7 @@
 #include <map>
 #include <limits.h>
 #include <cstring>
+#include <sys/time.h>
 
 #include "Node.h"
 #include "Net.h"
@@ -743,7 +744,7 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     }
 
     // This is the most efficient cutsize of the current FM pass
-    cout << "Final Cut size: "<< lowestCutsize << endl;
+    cout << "Pass Cut size: "<< lowestCutsize << endl;
     return lowestCutsize;
     
 }
@@ -824,8 +825,21 @@ int main(int argc, char *argv[]) {
     // }
 
     //At this time, we should have everything parsed into the correct data structures
-
     
+
+    //Time how long it'll take to start the program
+    struct timeval startTime;
+    struct timeval endTime;
+
+    gettimeofday(&startTime, NULL);
+     // Convert seconds to a readable format
+     time_t rawTime = startTime.tv_sec;
+     struct tm *timeInfo = localtime(&rawTime);
+ 
+     // Format and display the date and time
+     char buffer[80];
+     strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeInfo);
+     std::cout << "Current Date and Time: " << buffer << "." << startTime.tv_usec << " microseconds" << std::endl;
 
     //Create the inital cut
     //Randomly assign all nodes a status of either left or right
@@ -842,8 +856,17 @@ int main(int argc, char *argv[]) {
         cut = fmpass(&Nodes, &Nets);
         cout << endl << endl;
     } while (cut < lastCut);
-    
 
+    cout << "Final Cutsize Overall: " << lastCut << endl;
+    
+    gettimeofday(&endTime, NULL);
+
+    // Calculate the elapsed time in seconds
+    long seconds, uSeconds;
+	seconds = endTime.tv_sec - startTime.tv_sec;
+	uSeconds = endTime.tv_usec - startTime.tv_usec;
+	double elapsed = seconds + uSeconds / 1000000.0;
+	printf("Time Elapsed: %.6f seconds\n", elapsed);
 
 
     writeOutput(ofilepath,lastCut,Nodes);
