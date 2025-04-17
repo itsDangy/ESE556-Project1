@@ -205,18 +205,44 @@ int calculateCrossings(vector<Node>* Nodes, vector<Net>* Nets) {
         //Loop through each node on the net
             //Compare this to every other node (besides itself) and count the number of crossings
         //Store that number into node.crossings
+
+    if (logLevelGlobal > 2) {
+                cout << "-------Calculating crossings-----" << endl;
+    }
+
     for (size_t i = 0; i < Nets->size(); i++) {
+        if (logLevelGlobal > 2) {
+            cout << "Looking at " << (*Nets)[i].getName() << endl;
+        }
         for (size_t j = 0; j < (*Nets)[i].getConnectedNodes().size(); j++) {
-            int crossings = 0;
             int nodejIdx = (*Nets)[i].getConnectedNodes()[j];
+            int crossings = (*Nodes)[nodejIdx].getCrossings();
+
             for (size_t k = 0; k < (*Nets)[i].getConnectedNodes().size(); k++) {
                 int nodekIdx = (*Nets)[i].getConnectedNodes()[k];
-                if (j == k) break;
+
+                    if (logLevelGlobal > 2) {
+                        cout << " node J [" << nodejIdx << "]: " << (*Nodes)[nodejIdx].getID() << " vs node k[" << nodekIdx << "]: " << (*Nodes)[nodekIdx].getID() << endl;
+                    }
+
+
+                if (j == k) {
+                    if (logLevelGlobal > 2) {
+                        cout << "\tSame Node" << endl;
+                    }
+                    continue;
+                }
                 if ((*Nodes)[nodejIdx].whichPartition() ^ (*Nodes)[nodekIdx].whichPartition()) {
                     //In here, there is a crossing.
                     crossings++;
                     flag = true;
+                    if (logLevelGlobal > 2) {
+                        cout << "\tThere is a crossing." << endl;
+                    }
                 }
+            }
+            if (logLevelGlobal > 2) {
+                cout << "Number of crossings for " << (*Nodes)[nodejIdx].getID() << ": " << crossings << "\n" << endl;
             }
             (*Nodes)[nodejIdx].setCrossings(crossings);
         }
@@ -224,9 +250,11 @@ int calculateCrossings(vector<Node>* Nodes, vector<Net>* Nets) {
         if (flag) {
             cutsize++;
         }
+        flag = false;   //Reset back to original
     }
     return cutsize;
 }
+
 
 void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* rightBucket, vector<Node>* Nodes, int* lSize, int* rSize) {
     *lSize = 0;
@@ -237,6 +265,18 @@ void storeInBuckets(map<int, linkedlist*>* leftBucket, map<int, linkedlist*>* ri
     for (int i = 0; i < numNodes; i++) {
         if (logLevelGlobal > 2) {
             cout << (*Nodes)[i].getID() << " placed in ";
+        }
+
+        //If the node is locked, don't place it anywhere in the bucket structure
+        if ((*Nodes)[i].getLockStatus() == 1) {
+            if (logLevelGlobal > 2) {
+                cout << "Nothing. Node is locked" << endl;
+            }
+            continue;
+        } else {
+            if (logLevelGlobal > 2) {
+                cout << "\t\t";
+            }
         }
         
         
@@ -560,24 +600,44 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
         bool inc_cutsize, dec_cutsize; // flags that indicate if the cutsize should be incremented or decremented. 
 
 
+        //Move the parititon
+        //Then, update the gains (Crossings)
+        //Update Buckets
+        //Then lock
+        //Then, remove from buckets
+
+
+        //Update the parition
+        (*Nodes)[selectedNode].movePartition();
+        (*Nodes)[selectedNode].lockNode();
+
+        cutsize = calculateCrossings(Nodes, Nets);
+        
+        while (!leftBucket.empty()) {
+            leftBucket.erase(leftBucket.begin());
+        }
+
+        while (!rightBucket.empty()) {
+            rightBucket.erase(rightBucket.begin());
+        }
+
+        storeInBuckets(&leftBucket, &rightBucket, Nodes, &lBucketSize, &rBucketSize);
+
+        // removeFromBucket(chosenBucket, gainSelector, selectedNode, Nodes);
+
+        
+        
+
         //Remove the the selectedNode out of the bucket structure
         if (logLevelGlobal > 2) {
 	        cout << "Removing node[" << selectedNode << "]: " << (*Nodes)[selectedNode].getID() << " in bucket " << (*Nodes)[selectedNode].whichPartition() << " with gain of " << gainSelector << endl;
         }
-        removeFromBucket(chosenBucket, gainSelector, selectedNode, Nodes);
-        //Ensure that the removed node is locked
-        (*Nodes)[selectedNode].lockNode();
-
-        //Once removed, then update the parition
-        (*Nodes)[selectedNode].movePartition();
 
         if (logLevelGlobal > 0) {
             printBuckets(leftBucket, rightBucket, selectedNode, Nodes,timeline);
         }
         
-        
-                
-        
+
         // i refers to the index of the current net
         for (int i = 0; i < (*Nodes)[selectedNode].getConnectedNets().size(); i++) {
             int currentNet = (*Nodes)[selectedNode].getConnectedNets()[i];
@@ -843,9 +903,10 @@ int main(int argc, char *argv[]) {
 
     //Create the inital cut
     //Randomly assign all nodes a status of either left or right
-    srand(time(0));
+    // srand(time(0));
     for (int i = 0; i < numNodes; i++) {
-        Nodes[i].setPartition(rand() % 2);
+        // Nodes[i].setPartition(rand() % 2);
+        Nodes[i].setPartition(i % 2);
     }
 
     int cut = INT_MAX;

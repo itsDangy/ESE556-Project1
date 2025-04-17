@@ -12,3 +12,4 @@ cds.lib
 lib.defs
 bin/FM_WKK
 bin/main.o
+/Benchmarks/*
