@@ -209,6 +209,12 @@ int calculateCrossings(vector<Node>* Nodes, vector<Net>* Nets) {
     if (logLevelGlobal > 2) {
                 cout << "-------Calculating crossings-----" << endl;
     }
+    //Everytime we recalculate crossings, reset the crossings of the node to 0
+        //However, don't do this while we're calculating crossings
+
+    for (int i = 0; i < (*Nodes).size(); i++) {
+        (*Nodes)[i].setCrossings(0);
+    }
 
     for (size_t i = 0; i < Nets->size(); i++) {
         if (logLevelGlobal > 2) {
@@ -610,7 +616,7 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
         //Update the parition
         (*Nodes)[selectedNode].movePartition();
         (*Nodes)[selectedNode].lockNode();
-
+        //Set all crossings to 0
         cutsize = calculateCrossings(Nodes, Nets);
         
         while (!leftBucket.empty()) {
@@ -797,6 +803,8 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     // Where that is the case
     for (int i = timeline.size() - 1; i >= 0; i--) {
         if (timeline[i].cutSize == lowestCutsize) {
+            //Do it once more, then break
+            (*Nodes)[timeline[i].lockedNode].movePartition();
             break;
         }
         // Otherwise flip the node and continue
@@ -916,6 +924,11 @@ int main(int argc, char *argv[]) {
         lastCut = cut;
         cut = fmpass(&Nodes, &Nets);
         cout << endl << endl;
+
+        //Then, unlock all of the nodes, since FMPass has locked them
+        for (int i = 0; i < numNodes; i++) {
+            Nodes[i].unlockNode();
+        }
     } while (cut < lastCut);
 
     cout << "Final Cutsize Overall: " << lastCut << endl;
