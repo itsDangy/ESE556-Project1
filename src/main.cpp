@@ -456,6 +456,58 @@ void printBuckets(map<int, linkedlist*> leftBucket, map<int, linkedlist*> rightB
     cout << endl;
 }
 
+int updateCrossings(vector<Node>* Nodes, vector<Net>* Nets, int selectedNode, int cutsize, int previousPartition) {
+    vector<int> connectedNets = (*Nodes)[selectedNode].getConnectedNets();
+    int updatedCutsize = cutsize;
+    int currentPartition = (*Nodes)[selectedNode].whichPartition();
+
+    for (int netIdx : connectedNets) {
+        const vector<int>& netNodes = (*Nets)[netIdx].getConnectedNodes();
+
+        int countOldPartition = 0;
+        int countOtherPartition = 0;
+
+        for (int nodeIdx : netNodes) {
+            if (nodeIdx == selectedNode) continue;
+
+            int partition = (*Nodes)[nodeIdx].whichPartition();
+            if (partition == previousPartition) countOldPartition++;
+            else countOtherPartition++;
+        }
+
+        // Determine prior and current cut status
+        bool wasCut = (countOldPartition > 0 && countOtherPartition > 0);
+        bool isCut = false;
+        int countNewPartition = 0;
+        int countOpposite = 0;
+
+        for (int nodeIdx : netNodes) {
+            int partition = (*Nodes)[nodeIdx].whichPartition();
+            if (partition == currentPartition) countNewPartition++;
+            else countOpposite++;
+        }
+
+        isCut = (countNewPartition > 0 && countOpposite > 0);
+
+        if (!wasCut && isCut) updatedCutsize++;
+        else if (wasCut && !isCut) updatedCutsize--;
+
+        // Update gain (crossings) of other nodes
+        for (int nodeIdx : netNodes) {
+            if (nodeIdx == selectedNode) continue;
+
+            if ((*Nodes)[nodeIdx].whichPartition() == currentPartition) {
+                (*Nodes)[nodeIdx].decCrossings();
+            } else {
+                (*Nodes)[nodeIdx].incCrossings();
+            }
+        }
+    }
+
+    return updatedCutsize;
+}
+
+
 int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
     // For all terminal nodes, ensure that they will no longer move.
 
@@ -614,10 +666,11 @@ int fmpass(vector<Node>* Nodes, vector<Net>* Nets) {
 
 
         //Update the parition
+        int previousPartition = (*Nodes)[selectedNode].whichPartition();
         (*Nodes)[selectedNode].movePartition();
         (*Nodes)[selectedNode].lockNode();
-        //Set all crossings to 0
-        cutsize = calculateCrossings(Nodes, Nets);
+        //Update the gains of the selected node and the nodes connected to it via connected nets
+        cutsize = updateCrossings(Nodes, Nets, selectedNode,cutsize, previousPartition);
         
         while (!leftBucket.empty()) {
             leftBucket.erase(leftBucket.begin());
@@ -913,7 +966,7 @@ int main(int argc, char *argv[]) {
     //Randomly assign all nodes a status of either left or right
     srand(time(0));
     for (int i = 0; i < numNodes; i++) {
-        // Nodes[i].setPartition(rand() % 2);
+        //Nodes[i].setPartition(rand() % 2);
         Nodes[i].setPartition(i % 2);
     }
 

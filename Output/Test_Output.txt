@@ -1,9 +1,9 @@
 Cutsize: 1
-Partition Ratio: 0.60221
-Partition 1: 2	Area: 109 - 37.5862%
+Partition Ratio: 0.234043
+Partition 1: 1	Area: 55 - 18.9655%
+o4
+Partition 2: 4	Area: 235 - 81.0345%
 o0
 o1
-Partition 2: 3	Area: 181 - 62.4138%
 o2
 o3
-o4
