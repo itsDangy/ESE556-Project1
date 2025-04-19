@@ -1,14 +1,9 @@
-Cutsize: 0
-Partition Ratio: 0
-Partition 1: 0	Area: 0 - 0%
-Partition 2: 10	Area: 394 - 100%
+Cutsize: 1
+Partition Ratio: 0.60221
+Partition 1: 2	Area: 109 - 37.5862%
 o0
 o1
+Partition 2: 3	Area: 181 - 62.4138%
 o2
 o3
 o4
-o5
-p0
-p1
-p2
-p3

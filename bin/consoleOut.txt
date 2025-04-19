@@ -1,0 +1,94 @@
+Number of nodes: 5
+Number of nets: 4
+Node 45 ID: 
+
+Current Date and Time: 2025-04-17 12:39:39.741887 microseconds
+No node selected
+Left Bucket
+	Gain: 2		o1->o3->
+Right Bucket
+	Gain: 1		o0->o4->
+	Gain: 2		o2->
+Locked Nodes (In order): 
+move and lock node o2
+Left Bucket
+	Gain: 0		o1->o3->
+Right Bucket
+	Gain: 1		o0->o4->
+Locked Nodes (In order): o2 
+move and lock node o3
+Left Bucket
+	Gain: 0		o1->
+Right Bucket
+	Gain: -1		o4->
+	Gain: 1		o0->
+Locked Nodes (In order): o2 o3 
+move and lock node o0
+Left Bucket
+	Gain: -2		o1->
+Right Bucket
+	Gain: -1		o4->
+Locked Nodes (In order): o2 o3 o0 
+move and lock node o1
+Left Bucket
+Right Bucket
+	Gain: -1		o4->
+Locked Nodes (In order): o2 o3 o0 o1 
+move and lock node o4
+Left Bucket
+Right Bucket
+Locked Nodes (In order): o2 o3 o0 o1 o4 
+No node selected
+Left Bucket
+Right Bucket
+Locked Nodes (In order): o2 o3 o0 o1 o4 
+Pass Cut size: 1
+
+
+No node selected
+Left Bucket
+	Gain: -2		o1->
+	Gain: -1		o0->
+	Gain: 0		o2->
+Right Bucket
+	Gain: -1		o4->
+	Gain: 0		o3->
+Locked Nodes (In order): 
+move and lock node o3
+Left Bucket
+	Gain: -2		o1->o2->
+	Gain: -1		o0->
+Right Bucket
+	Gain: 1		o4->
+Locked Nodes (In order): o3 
+move and lock node o0
+Left Bucket
+	Gain: -2		o2->
+	Gain: 0		o1->
+Right Bucket
+	Gain: 1		o4->
+Locked Nodes (In order): o3 o0 
+move and lock node o4
+Left Bucket
+	Gain: -2		o2->
+	Gain: 0		o1->
+Right Bucket
+Locked Nodes (In order): o3 o0 o4 
+move and lock node o1
+Left Bucket
+	Gain: 0		o2->
+Right Bucket
+Locked Nodes (In order): o3 o0 o4 o1 
+move and lock node o2
+Left Bucket
+Right Bucket
+Locked Nodes (In order): o3 o0 o4 o1 o2 
+No node selected
+Left Bucket
+Right Bucket
+Locked Nodes (In order): o3 o0 o4 o1 o2 
+Pass Cut size: 1
+
+
+Final Cutsize Overall: 1
+Time Elapsed: 0.001284 seconds

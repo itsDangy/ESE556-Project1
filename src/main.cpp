@@ -913,8 +913,8 @@ int main(int argc, char *argv[]) {
     //Randomly assign all nodes a status of either left or right
     srand(time(0));
     for (int i = 0; i < numNodes; i++) {
-        Nodes[i].setPartition(rand() % 2);
-        // Nodes[i].setPartition(i % 2);
+        // Nodes[i].setPartition(rand() % 2);
+        Nodes[i].setPartition(i % 2);
     }
 
     int cut = INT_MAX;
